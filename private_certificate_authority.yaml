@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cloudformation template to setup CA.
+###############################################################################
+#                               Parameters                                    #
+###############################################################################
+Parameters:
+  Organization:
+    Type: String
+    Default: Rancher
+    Description: Company name. Max length of 64 characters.
+  OrganizationalUnit:
+    Type: String
+    Default: Engineering
+    Description: Company subdivision. Max length of 64 characters.
+  CountryName:
+    Type: String
+    Default: CA
+    Description: Two letter country code
+  StateOrProvince:
+    Type: String
+    Default: Ontario
+    Description: Full name. Max length of 128 characters
+  Locality:
+    Type: String
+    Default: Toronto
+    Description: City. Max length of 128 characters.
+  CommonName:
+    Type: String
+    Default: "*.ranchereks.com"
+    Description: Certificate authority name. Max length of 64 characters.
+##############################################################################
+#                               Resources                                    #
+##############################################################################
+Resources:
+  RootCA:
+    Type: 'AWS::ACMPCA::CertificateAuthority'
+    Properties:
+      Type: ROOT
+      KeyAlgorithm: RSA_2048
+      SigningAlgorithm: SHA256WITHRSA
+      Subject:
+        Country: !Ref CountryName
+        Organization: !Ref Organization
+        OrganizationalUnit: !Ref OrganizationalUnit
+        State: !Ref StateOrProvince
+        CommonName: !Ref CommonName
+        Locality: !Ref Locality
+      RevocationConfiguration:
+        CrlConfiguration:
+          Enabled: false
+  RootCACertificate:
+    Type: 'AWS::ACMPCA::Certificate'
+    Properties:
+      CertificateAuthorityArn: !Ref RootCA
+      CertificateSigningRequest: !GetAtt 
+        - RootCA
+        - CertificateSigningRequest
+      SigningAlgorithm: SHA256WITHRSA
+      TemplateArn: 'arn:aws:acm-pca:::template/RootCACertificate/V1'
+      Validity:
+        Type: DAYS
+        Value: 100
+  RootCAActivation:
+    Type: 'AWS::ACMPCA::CertificateAuthorityActivation'
+    Properties:
+      CertificateAuthorityArn: !Ref RootCA
+      Certificate: !GetAtt 
+        - RootCACertificate
+        - Certificate
+      Status: ACTIVE
+
+##############################################################################
+#                               Outputs                                      #
+##############################################################################
+Outputs:
+  CertificateAuthorityArn:
+    Value: !Ref RootCA
+    Export:
+      Name: CertificateAuthorityArn

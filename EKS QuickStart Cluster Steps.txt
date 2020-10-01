@@ -1,0 +1,99 @@
+# 1) Create EKS QuickStart Cluster
+# 2) Verify aws cli, kubectl and helm are installed on end user system
+#   Install Helm:
+curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+#Verify version:
+helm version --short
+
+#Download latest Rancher repository
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm fetch rancher-latest/rancher
+# List rancher chart 
+helm search repo rancher
+
+ # Create NameSpace:
+ kubectl create namespace cattle-system
+
+ # The Rancher management server is designed to be secure by default and requires SSL/TLS configuration.
+ # Need to determine which method we want to use
+
+ # Rancher-generated TLS certificate: 
+ In this case, you will need to install cert-manager into the cluster. Rancher utilizes cert-manager to issue and maintain its certificates. Rancher will generate a CA certificate of its own, and sign a cert using that CA. cert-manager is then responsible for managing that certificate.
+
+ kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.0/cert-manager.crds.yaml
+
+ kubectl create namespace cert-manager
+
+ 
+ helm repo add jetstack https://charts.jetstack.io
+ helm repo update
+ helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v0.15.0
+  kubectl get pods --namespace cert-manager
+
+helm upgrade --install rancher rancher-latest/rancher \
+  --namespace cattle-system \
+  --set hostname=ranchereks.awscloudbuilder.com  \
+  --set ingress.tls.source=secret
+  --set ingress.extraAnnotations."kubernetes\.io/ingress\.class"=nginx
+
+  helm install rancher-stable/rancher --name rancher  --set hostname=rancher.example.com --set ingress.tls.source=secret --set ingress.extraAnnotations."kubernetes\.io/ingress\.class"=nginx
+
+kubectl -n cattle-system rollout status deploy/rancher
+
+# Install nginx
+
+# first, add the default repository, then update
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+# Install 
+helm install nginxwebserver bitnami/nginx --set rbac.create=true
+
+NAME: nginxwebserver
+LAST DEPLOYED: Thu Sep 24 02:43:59 2020
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+** Please be patient while the chart is being deployed **
+
+NGINX can be accessed through the following DNS name from within your cluster:
+
+    nginxwebserver.default.svc.cluster.local (port 80)
+
+To access NGINX from outside the cluster, follow the steps below:
+
+1. Get the NGINX URL by running these commands:
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace default -w nginxwebserver'
+
+    export SERVICE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].port}" services nginxwebserver)
+    export SERVICE_IP=$(kubectl get svc --namespace default nginxwebserver -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "http://${SERVICE_IP}:${SERVICE_PORT}"
+
+# Get value of external IP
+kubectl get pods -l app.kubernetes.io/name=nginx
+
+kubectl get service mywebserver-nginx -o wide
+
+afb0fa37380f14081bdccc57f8d3a133-976282293.ca-central-1.elb.amazonaws.com
+
+
+RKE:
+
+https://github.com/rancher/rke/releases/download/v1.1.7/rke_linux-amd64
+
+
+
+# Let’s Encrypt: 
+The Let’s Encrypt option also uses cert-manager. However, in this case, cert-manager is combined with a special Issuer for Let’s Encrypt that performs all actions (including request and validation) necessary for getting a Let’s Encrypt issued cert. This configuration uses HTTP validation (HTTP-01), so the load balancer must have a public DNS record and be accessible from the internet.
+
+#Bring your own certificate: 
+This option allows you to bring your own public- or private-CA signed certificate. Rancher will use that certificate to secure websocket and HTTPS traffic. In this case, you must upload this certificate (and associated key) as PEM-encoded files with the name tls.crt and tls.key. If you are using a private CA, you must also upload that certificate. This is due to the fact that this private CA may not be trusted by your nodes. Rancher will take that CA certificate, and generate a checksum from it, which the various Rancher components will use to validate their connection to Rancher.

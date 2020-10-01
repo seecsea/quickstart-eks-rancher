@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploys the Rancher helm chart into an existing kubernetes cluster (qs-1qqod7mii)"
+###############################################################################
+#                               Parameters                                    #
+###############################################################################
+Parameters:
+########---ROUTE53---#########
+  PHZName:
+    Type: String
+    Default: ranchereks.com.
+    Description: The name of your private hosted zone
+  DomainName:
+    Type: String
+    Default: www.ranchereks.com
+    Description: The name of your private hosted zone
+
+##############################################################################
+#                               Resources                                    #
+##############################################################################
+Resources:
+# PRIVATE HOSTED ZONE
+  DNSHostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      HostedZoneConfig:
+        Comment: !Sub "${PHZName} private DNS zone"
+      Name: !Ref PHZName
+      VPCs:
+        -
+          VPCId: vpc-0c71e9b85da072d09
+          VPCRegion: !Ref "AWS::Region"
+
+# Create Rancher Namespace
+  ACMCertificate:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      CertificateAuthorityArn: !ImportValue CertificateAuthorityArn
+      DomainName: !Ref DomainName
+      DomainValidationOptions:
+            - DomainName: !Ref DomainName
+              ValidationDomain: !Ref DomainName
+      ValidationMethod: DNS
+Outputs:
+  HostedZone:
+    Value: !Ref DNSHostedZone

@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploys the Rancher helm chart into an existing kubernetes cluster (qs-1qqod7mii)"
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Rancher for EKS configuration
+        Parameters:
+          - KubeClusterName
+    ParameterLabels:
+      KubeClusterName:
+        default: EKS cluster name
+Parameters:
+  KubeClusterName:
+    Type: String
+    Description: Name of the EKS cluster to deploy Rancher into.
+    Default: EKS-GZMSZCIW
+  Namespace:
+    Type: String
+    Default: cattle-system
+    Description: Kubernetes namespace to deploy Rancher into, default is cattle-system.'
+Resources:
+# Create Rancher Namespace
+  RancherNamespace:
+    Type: "Custom::KubeManifest"
+    Properties:
+      ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
+      ClusterName: !Ref KubeClusterName
+      Manifest:
+        kind: Namespace
+        apiVersion: v1
+        metadata:
+          name: !Ref Namespace
+  RancherIngressNginx:
+    Type: "Custom::KubeManifest"
+    Properties:
+      ClusterName: !Ref KubeClusterName
+      ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
+      Repository: https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.35.0/deploy/static/provider/aws/deploy.yaml
+      Chart: kubectl apply -f 
+      Name: ingress-nginx
+      Values:
+        clusterName: !Ref KubeClusterName
+
+  #Create the secret in EKS cluster:
+  RancherSecret:
+    Type: "Custom::KubeManifest"
+    DependsOn: RancherNamespace
+    Properties:
+      ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
+      ClusterName: !Ref KubeClusterName
+      Manifest:
+        kind: Secret
+        apiVersion: v1
+        metadata:
+          name: rancher-tls
+          namespace: !Ref Namespace
+        type: Opaque
+        data:
+          dockercfg.json: !Base64 "{}"
+          integrationId: {'Fn::Base64': !Ref SnykIntegrationId}
+  #Install Rancher on EKS Cluster      
+  RancherInstall:
+    Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: RancherIngressNginx
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Repository: https://releases.rancher.com/server-charts/latest
+      Namespace: !Ref Namespace
+      Chart: rancher-latest/rancher
+      Name: rancher-latest
+      Values: 
+        - hostname: ranchereksv2.awscloudbuilder.com
+        - ingress: 
+            tls: 
+              source: rancher
+Outputs:
+  RancherReleaseName:
+    Value: !Ref RancherNamespace
