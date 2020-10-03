@@ -31,16 +31,6 @@ Resources:
         apiVersion: v1
         metadata:
           name: !Ref Namespace
-  RancherIngressNginx:
-    Type: "Custom::KubeManifest"
-    Properties:
-      ClusterName: !Ref KubeClusterName
-      ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
-      Repository: https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.35.0/deploy/static/provider/aws/deploy.yaml
-      Chart: kubectl apply -f 
-      Name: ingress-nginx
-      Values:
-        clusterName: !Ref KubeClusterName
 
   #Create the secret in EKS cluster:
   RancherSecret:
@@ -50,30 +40,28 @@ Resources:
       ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
       ClusterName: !Ref KubeClusterName
       Manifest:
-        kind: Secret
         apiVersion: v1
+        kind: Secret
         metadata:
-          name: rancher-tls
-          namespace: !Ref Namespace
-        type: Opaque
+          name: rancher-secret
         data:
-          dockercfg.json: !Base64 "{}"
-          integrationId: {'Fn::Base64': !Ref SnykIntegrationId}
+          tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURLRENDQWhBQ0NRRFUySmFzZm96WmJEQU5CZ2txaGtpRzl3MEJBUXNGQURCV01Ta3dKd1lEVlFRRERDQnkKWVc1amFHVnlaV3R6Y1hNdVlYZHpZMnh2ZFdSaWRXbHNaR1Z5TG1OdmJURXBNQ2NHQTFVRUNnd2djbUZ1WTJobApjbVZyYzNGekxtRjNjMk5zYjNWa1luVnBiR1JsY2k1amIyMHdIaGNOTWpBeE1EQXpNREkwTXpRMFdoY05NakV4Ck1EQXpNREkwTXpRMFdqQldNU2t3SndZRFZRUUREQ0J5WVc1amFHVnlaV3R6Y1hNdVlYZHpZMnh2ZFdSaWRXbHMKWkdWeUxtTnZiVEVwTUNjR0ExVUVDZ3dnY21GdVkyaGxjbVZyYzNGekxtRjNjMk5zYjNWa1luVnBiR1JsY2k1agpiMjB3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRENNaFVXTTQyd05rdGd6U2ZlCjlHYm5nRHhDWml6ajFHaVB6bVBEcDU3Smt0UGhENHQra21Qek9neFV6K0hmaHpkTHBHMVZUU3pWVkVnYmVBTTIKS0tqZUlXa3lQT3FzcDdLeWFPVkJZdWlVSkJ2ZnFmSGhJbG4vN09DcFBiN3FnRTY3cUNwSzNEVzJPY1lhMS9uUApiTGcwOFY0dVIvc2ZFZFhnZFZBTXJocTl5V1l4aVNOb3VCQi9zVTlBd25sNWpqWDl4NSt2d05nY2drWmdYazlsCkV5Z3R1VEMrdGRmSzlIckVDTVlRRUtDV0RCWFo1b1dLWlpwRkVPUVYyWi91aWM3Q2pmZHNtcFpoVEVyYW81VTEKWGpFTnMyeVhWNHYyQmdFejAvTDBKMzF0TStWZlNyKzhBMWlsNUozNmlVQU0zVk9GS3NBbnptTDQ2TEJ2UEZueApVdXE1QWdNQkFBRXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRE1mNFYrM3AvSE5kQWFnK0UzT2sxZ3lBY2ZLCkRLSUlTYVZYUi85V09XblNrT250bXpLZWY4dnNrdWorR25GT09aajJLNmYzbDBhc0pXWk15eWhueUo2VVRyOFMKQzBXTGNEcFNJQnRsN2ZNNXc0aWMzd2pFKzdpSHF2UEIrUzZZcWtsSkxrelBpSEtjTVlXK2RPbDBXeGh6am1SUQowa3B5enNXK2J4bHV1TUMwNHRSVkN4bll6T2lHZFVDM0dQRGkwSGZjZ09palZqQ1hYYlJ1Q2Z4b05jM3REOTBFCkdaYjJhcFNkcGdnM3lJeEUrVW5rR2djY2FBbWFFblJnZWVPck1QM2lKS2hNd0t2MGwwaGdjUFlEZkM0dVlOSlYKdFBOOXZvdnZnUWhuT3pZREMvcENJL1ZUdGhlK3ZNdHdHTlRITVFCS1dmd3VEcFdESllLenpGZ3hkcEk9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=
+          tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2d0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktrd2dnU2xBZ0VBQW9JQkFRRENNaFVXTTQyd05rdGcKelNmZTlHYm5nRHhDWml6ajFHaVB6bVBEcDU3Smt0UGhENHQra21Qek9neFV6K0hmaHpkTHBHMVZUU3pWVkVnYgplQU0yS0tqZUlXa3lQT3FzcDdLeWFPVkJZdWlVSkJ2ZnFmSGhJbG4vN09DcFBiN3FnRTY3cUNwSzNEVzJPY1lhCjEvblBiTGcwOFY0dVIvc2ZFZFhnZFZBTXJocTl5V1l4aVNOb3VCQi9zVTlBd25sNWpqWDl4NSt2d05nY2drWmcKWGs5bEV5Z3R1VEMrdGRmSzlIckVDTVlRRUtDV0RCWFo1b1dLWlpwRkVPUVYyWi91aWM3Q2pmZHNtcFpoVEVyYQpvNVUxWGpFTnMyeVhWNHYyQmdFejAvTDBKMzF0TStWZlNyKzhBMWlsNUozNmlVQU0zVk9GS3NBbnptTDQ2TEJ2ClBGbnhVdXE1QWdNQkFBRUNnZ0VBWE9qUE0rY0laQVVsL1ROS1h4NDVXWXI5eVpyTzRWWFBqUFhtdjBZajd6YmoKVGlzOHh4ck0zU0twb2E0djE5eitkSjgvZSs5SGd1MG03cFYxbStUS0hqU0grdlF3SnRpNDR5alNmbjBPMzBtRApXSGdiZEdZVi94N2F3YjM3Nkgvb3ExbWltbHhQQ2xjTDArMys0K0dWSkNkU3N2dlhScDhtMzVQZzc2QWd4U21QCjhMVVJnc0JjVE9Wd0VxOURjeWtpYkhiYTV4eTIxenNsQU9MbmE3RGVxMDdIcFBUWlNaNUxGRkJ2dVJ3UGxDeTYKSkZLQ0NwUW9XWjlFTFFIR3RIQUl3N054R3FEeE95UFo5aUpZL2RmRjYzQUxtaStvbFJtcnU2ZC9EMDd2STdOSwoxaHVvQjhKTlpsZ1Ntc0kxdWdKS3U1OXMwaTdkdkJFaTJnVGVtM3dNdlFLQmdRRGhjbmdZQS9LejE0cWE5MjExCjNjcDBVaWJCSVJ4a2pTbzRldGVkaUZ0RlVLUkpabUJtVjBiWTRJWm1ucG1aa0xaS2kyOU5iMldOM1VpL2V3Ri8KakJKYmYrUEhWL2RvUnpiS0tXYTdRY3FqNEhHSGU2QnQ5SXVCSWQxaVpvd1hLT3B6R1ZDVlc0QTVQSHhSVkdLbworbnFORDY5NGI3UHY1aUxkVzFPcDB0NUR2d0tCZ1FEY2cyUkZ0dkN3M1RUcExPN1hjM1dvWFJFUVdGR0lUbm9DClFPLzViNk1uUmVjaUxsc084MkkzLzFxNXNyT2NialRkSjJLQXNCRTJBWE5FQzF4TC8zMWNGMjZGMHdiT0pyYkMKbncrVDdDUHZoR3d2NU5DTEp0UlAxdVFBTW5FSHBvcy9sN1ZyTTBVRmpyVWNzUldwT0VrZHVQWGVGTDIxZDlmTgp0bDZwTFJzUGh3S0JnUUNzUG4vQW9XdVJ1YkQ5R3VNM2RUK1R4WncwVys3TWFBb0U0dDNQVHZta3FLc01KVHFyCmxpemIwQmIvV2xjeU81ejZzVE5WYnpHZ3hKc3JLSGlKa1dRSklsbk4yTWgrbEVJcERKNmZuUEdNYVJOMEZxRUkKd1JqQWpUWU9VeGpmTFBTTEFhRk9xM3o0dmR5aGFwNkNTZlROeDFraDQvNE80TDVzYnJVcC82Q3ZFd0tCZ1FEUAp1dzg1QlcrVWphNk1nd0cxQVZXemQ0amRwdldYdktYL2ZZRVRyL0U0ekFkREVmeENCMUZkZ3piS2ZPZnEwMzhGClgxYlIrQXNlbnhzZzNMcmo5Umo1S2pHNTYrUWJUQ2tiQ3BDNFB0cFRocUlNTkRlby9yay9SU2FnY09ROTJzeU8KNmJIRC9SWm1kOXR4M2ZpVDR5d3R6ZElBbGZWcEFDN1I0WjBuTGhDeC9RS0JnUUNuMDFTajY1WHhoZmNUSkVndQpMNDBPUTNGT1JCbjZsV2tIa2FTMlQybVJIaFp3Vk9lRCtXanEzWnBWb2YyazI3cDZ6eStqWVpNcDR2OGlPRTdOCkN0Wk1TZWVod3ErL2dSUDBFZUFPOVZQWGR5SkZmTkhIMm5zdTc3TWlLNkp2S3o5aUVYNXE4Ulp4OE9yWDBKTGIKcjFkYlpMT2JkWWxxYzFhWmVBWm52S01qUUE9PQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0t
+        type: kubernetes.io/tls
+
   #Install Rancher on EKS Cluster      
   RancherInstall:
     Type: "AWSQS::Kubernetes::Helm"
-    DependsOn: RancherIngressNginx
+    DependsOn: RancherNamespace
     Properties:
       ClusterID: !Ref KubeClusterName
-      Repository: https://releases.rancher.com/server-charts/latest
       Namespace: !Ref Namespace
-      Chart: rancher-latest/rancher
-      Name: rancher-latest
+      Repository: https://releases.rancher.com/server-charts/stable
+      Chart: rancher-stable/rancher
+      Name: rancher-stable
       Values: 
-        - hostname: ranchereksv2.awscloudbuilder.com
-        - ingress: 
-            tls: 
-              source: rancher
+        hostname: ranchereksqs.awscloudbuilder.com
+        ingress.tls.source: secret
 Outputs:
   RancherReleaseName:
     Value: !Ref RancherNamespace
