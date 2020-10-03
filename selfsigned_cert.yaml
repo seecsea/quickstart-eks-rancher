@@ -16,7 +16,7 @@ Resources:
       Runtime: python3.7
       Timeout: 900
       Code:
-        S3Bucket: rancher-quickstart-lambdazips-us-east-1-772252853888
+        S3Bucket: rancher-qs-eks-lambdazip-ca-central
         S3Key: function.zip
 
   certGenLambdaIamRole:
