@@ -45,7 +45,7 @@ kubectl create namespace cattle-system
 
 # The Rancher management server is designed to be secure by default and requires SSL/TLS configuration.
 # Defining the Ingress resource (with SSL termination) to route traffic to the services created above 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=ranchereks.awscloudbuilder.com/O=ranchereks.awscloudbuilder.com"
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=ranchereksqs.awscloudbuilder.com/O=ranchereksqs.awscloudbuilder.com"
 
 #Create the secret in the cluster:
 kubectl create secret tls tls-secret --key tls.key --cert tls.crt
@@ -53,5 +53,5 @@ kubectl create secret tls tls-secret --key tls.key --cert tls.crt
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --set hostname=ranchereks.awscloudbuilder.com  \
-  --set ingress.tls.source=rancher
+  --set hostname=ranchereksqs.awscloudbuilder.com  \
+  --set ingress.tls.source=secret
