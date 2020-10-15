@@ -4,9 +4,11 @@ Description: >-
   inside a VPC.  The Rancher installation creates a NLB and Route 53 domain records
   so more friendly access to the rancher URL.
   This template creates Amazon EC2 Linux instance temporarily to execute kubectl
-  commands and terminates the instalce.
+  commands and terminates the instalce. (qs-1r7ttg5dl)
 
 Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Launch into an existing EKS cluster"
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
