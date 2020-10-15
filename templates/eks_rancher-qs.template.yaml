@@ -1,24 +1,63 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Deploys the Rancher helm chart into an existing kubernetes cluster (qs-1qqod7mii)"
+Description: "Deploys the Rancher helm chart into an existing Kubernetes cluster (qs-1qqod7mii)"
 Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Launch into an existing Kubernetes cluster"
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
           default: Rancher for EKS configuration
         Parameters:
           - KubeClusterName
+          - Namespace
+      - Label:
+          default: AWS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3BucketRegion
+          - QSS3KeyPrefix
     ParameterLabels:
       KubeClusterName:
         default: EKS cluster name
+      Namespace:
+        default: Kubernetes namespace
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket region
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
 Parameters:
   KubeClusterName:
     Type: String
     Description: Name of the EKS cluster to deploy Rancher into.
-    Default: EKS-GZMSZCIW
   Namespace:
     Type: String
     Default: cattle-system
-    Description: Kubernetes namespace to deploy Rancher into, default is cattle-system.'
+    Description: Kubernetes namespace to deploy Rancher into, default is cattle-system.
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-eks-rancher/
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    Type: String
 Resources:
 # Create Rancher Namespace
   RancherNamespace:
