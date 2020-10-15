@@ -1,0 +1,23 @@
+project:
+  name: quickstart-eks-rancher
+  owner: npark@amazon.com
+  shorten_stack_name: true
+  regions:
+  - us-east-2
+
+tests:
+  test-rancher:
+    template: templates/rancher.template
+    parameters:
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      QSS3KeyPrefix: "quickstart-eks-rancher"
+      PrivateSubnet1CIDR: "10.20.0.0/19"
+      PrivateSubnet1ID: "subnet-0e89c1baba0aab44e"
+      PrivateSubnet2CIDR: "10.20.32.0/19"
+      PrivateSubnet2ID: "subnet-00ecab6b34e593375"
+      PublicSubnet1CIDR: "10.20.128.0/20"
+      PublicSubnet2CIDR: "10.20.144.0/20"
+      VPCCIDR: "10.20.0.0/16"
+      VPCID: "vpc-0f0656edf5a6532cf"
+      EKSClusterName: "EKS-JJX9U3D1"
