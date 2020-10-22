@@ -7,17 +7,46 @@ project:
 
 tests:
   test-rancher:
-    template: templates/rancher.template
+    template: templates/rancher.template.yaml
     parameters:
       QSS3BucketName: $[taskcat_autobucket]
       QSS3BucketRegion: $[taskcat_current_region]
       QSS3KeyPrefix: "quickstart-eks-rancher"
       PrivateSubnet1CIDR: "10.20.0.0/19"
-      PrivateSubnet1ID: "subnet-0e89c1baba0aab44e"
+      PrivateSubnet1ID: "subnet-09047d0e00300c3fc"
       PrivateSubnet2CIDR: "10.20.32.0/19"
-      PrivateSubnet2ID: "subnet-00ecab6b34e593375"
+      PrivateSubnet2ID: "subnet-0e6e8a93871a2be64"
       PublicSubnet1CIDR: "10.20.128.0/20"
       PublicSubnet2CIDR: "10.20.144.0/20"
       VPCCIDR: "10.20.0.0/16"
-      VPCID: "vpc-0f0656edf5a6532cf"
-      EKSClusterName: "EKS-JJX9U3D1"
+      VPCID: "vpc-00845bdb220691bc9"
+      EKSClusterName: "EKS-ABVB50PF"
+      SecurityGroup: "sg-01e185058134a0900"
+      IAMRole: "Amazon-EKS-EKSStack-1CIP9ZXV63KOP-IamS-BastionRole-1KA6RR9OJCCLC"
+
+# Old Project
+#project:
+#  name: quickstart-eks-rancher
+#  owner: npark@amazon.com
+#  shorten_stack_name: true
+#  regions:
+#  - us-east-2
+#
+#tests:
+#  test-rancher:
+#    template: templates/rancher.template.yaml
+#    parameters:
+#      QSS3BucketName: $[taskcat_autobucket]
+#      QSS3BucketRegion: $[taskcat_current_region]
+#      QSS3KeyPrefix: "quickstart-eks-rancher"
+#      PrivateSubnet1CIDR: "10.20.0.0/19"
+#      PrivateSubnet1ID: "subnet-0e89c1baba0aab44e"
+#      PrivateSubnet2CIDR: "10.20.32.0/19"
+#      PrivateSubnet2ID: "subnet-00ecab6b34e593375"
+#      PublicSubnet1CIDR: "10.20.128.0/20"
+#      PublicSubnet2CIDR: "10.20.144.0/20"
+#      VPCCIDR: "10.20.0.0/16"
+#      VPCID: "vpc-0f0656edf5a6532cf"
+#      EKSClusterName: "EKS-JJX9U3D1"
+#      SecurityGroup: "sg-03e1308b4dbd96635"
+#      IAMRole: "Amazon-EKS-EKSStack-BN8FE2GFEXC4-IamSt-BastionRole-WVW3BY1EX8KF"
