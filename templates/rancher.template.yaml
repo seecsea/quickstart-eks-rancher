@@ -137,6 +137,9 @@ Parameters:
   SecurityGroup:
     Description: Security group for the installer to use
     Type: AWS::EC2::SecurityGroup::Id
+  DomainName:
+    Description: DNS domain name that users can use to access the Rancher console.
+    Type: String
 
 Rules:
   SubnetsInVPC:
@@ -198,6 +201,8 @@ Resources:
                   - iam:DeleteInstanceProfile
                   - iam:PassRole
                   - iam:GetPolicy
+                  - iam:ListPolicyVersions
+                  - iam:DeletePolicy
                 Resource: '*'
           PolicyName: aws-quick-start-create-role-policy
       Path: /
@@ -280,6 +285,10 @@ Resources:
           SecurityGroup:
             description: "Security group for the installer to use"
             type: "String"
+          DomainName:
+            description: "DNS domain name that users can use to access the Rancher console."
+            type: "String"
+
         mainSteps:
         - name:  CreateStack
           action: aws:createStack
@@ -321,6 +330,10 @@ Resources:
                   Description: Security group for the installer to use
                   Type: "AWS::EC2::SecurityGroup::Id"
                   Default: "{{SecurityGroup}}"
+                DomainName:
+                  Description: DNS domain name that users can use to access the Rancher console
+                  Type: "String"
+                  Default: "{{DomainName}}"
               Resources:
                 RancherManagedS3Policy:
                   Type: 'AWS::IAM::ManagedPolicy'
@@ -412,9 +425,9 @@ Resources:
               CloudWatchLogGroupName: !Sub '/aws/Quick_Start/${AWS::StackName}'
             Parameters:
               commands:
-                #- wget -O /tmp/rancher_install.sh https://eks-quickstart-lambdazips-us-east-1-740568573523.s3.amazonaws.com/rancher_install.sh
-                - wget -O /tmp/rancher_install.sh https://eks-quickstart-lambdazips-us-east-2-660602721874.s3.us-east-2.amazonaws.com/rancher_install.sh
-                - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{global:REGION}} {{EKSClusterName}}'
+                #- wget -O /tmp/rancher_install.sh https://eks-quickstart-lambdazips-us-east-2-660602721874.s3.us-east-2.amazonaws.com/rancher_install.sh
+                - wget -O /tmp/rancher_install.sh https://rancher-qs-dev.s3.us-east-2.amazonaws.com/rancher_install.sh
+                - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{global:REGION}} {{EKSClusterName}} {{DomainName}}'
         # Determines if CFN Needs to be Signaled or if Work flow should just end
         - name: CFNSignalEnd
           action: aws:branch
@@ -499,7 +512,7 @@ Resources:
                   eks_cluster = event['ResourceProperties']['EKSClusterName']
                   iam_role = event['ResourceProperties']['IAMRole']
                   security_group = event['ResourceProperties']['SecurityGroup']
-
+                  domain_name = event['ResourceProperties']['DomainName']
                   if qs_bucket == "aws-quickstart":
                     qs_bucket = "aws-quickstart-" + qs_region
           
@@ -538,6 +551,9 @@ Resources:
                           ],
                           'SecurityGroup': [
                               security_group
+                          ],
+                          'DomainName': [
+                              domain_name
                           ]
                           #'URLSuffix': [
                           #    url_suffix
@@ -579,6 +595,7 @@ Resources:
       EKSClusterName: !Ref EKSClusterName
       IAMRole: !Ref 'IAMRole'
       SecurityGroup: !Ref 'SecurityGroup'
+      DomainName: !Ref 'DomainName'
       #URLSuffix: !Ref 'AWS::URLSuffix'
   SSMWaitHandle: 
     Type: AWS::CloudFormation::WaitConditionHandle
