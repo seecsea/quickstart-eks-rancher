@@ -425,9 +425,8 @@ Resources:
               CloudWatchLogGroupName: !Sub '/aws/Quick_Start/${AWS::StackName}'
             Parameters:
               commands:
-                #- wget -O /tmp/rancher_install.sh https://eks-quickstart-lambdazips-us-east-2-660602721874.s3.us-east-2.amazonaws.com/rancher_install.sh
-                - wget -O /tmp/rancher_install.sh https://rancher-qs-dev.s3.us-east-2.amazonaws.com/rancher_install.sh
-                - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{global:REGION}} {{EKSClusterName}} {{DomainName}}'
+                - wget -O /tmp/rancher_install.sh https://{{QSS3BucketName}}.s3.{{QSS3BucketRegion}}.amazonaws.com/{{QSS3KeyPrefix}}/assets/rancher_install.sh
+                - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{QSS3BucketRegion}} {{QSS3BucketName}} {{QSS3KeyPrefix}} {{EKSClusterName}} {{DomainName}}'
         # Determines if CFN Needs to be Signaled or if Work flow should just end
         - name: CFNSignalEnd
           action: aws:branch
@@ -508,7 +507,6 @@ Resources:
                   subnet_id = event['ResourceProperties']['PrivateSubnet1ID']
                   vpc_cidr = event['ResourceProperties']['VPCCIDR']
                   aws_region = event['ResourceProperties']['AWSRegion']
-                  #url_suffix = event['ResourceProperties']['URLSuffix']
                   eks_cluster = event['ResourceProperties']['EKSClusterName']
                   iam_role = event['ResourceProperties']['IAMRole']
                   security_group = event['ResourceProperties']['SecurityGroup']
@@ -555,9 +553,6 @@ Resources:
                           'DomainName': [
                               domain_name
                           ]
-                          #'URLSuffix': [
-                          #    url_suffix
-                          #]
                       },
                   )
           
@@ -596,8 +591,7 @@ Resources:
       IAMRole: !Ref 'IAMRole'
       SecurityGroup: !Ref 'SecurityGroup'
       DomainName: !Ref 'DomainName'
-      #URLSuffix: !Ref 'AWS::URLSuffix'
-  SSMWaitHandle: 
+  SSMWaitHandle:
     Type: AWS::CloudFormation::WaitConditionHandle
   SSMWaitCondition: 
     Type: AWS::CloudFormation::WaitCondition

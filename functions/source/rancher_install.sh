@@ -1,8 +1,14 @@
 #!/bin/bash
 
+if [ $# -lt 4 ]; then
+    echo "I need a minimum of 4 arguments to proceed. REGION, QSS3BucketName, QSS3KeyPrefix, EKSCLUSTERNAME, (optional - domain name)" && exit 1
+fi
+
 REGION=$1
-EKSCLUSTERNAME=$2
-[ -z "$3" ] && HostedZone="aws.private" || HostedZone="$3"
+QSS3BucketName=$2
+QSS3KeyPrefix=$3
+EKSCLUSTERNAME=$4
+[ -z "$5" ] && HostedZone="aws.private" || HostedZone="$5"
 RancherURL="rancher.$HostedZone"
 
 #Install jq for easier JSON object parsing
@@ -23,12 +29,9 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 
 # Start by creating the mandatory resources for NGINX Ingress in your cluster:
 # Parameterize version 0.40.2
-#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
-kubectl apply -f https://rancher-qs-dev.s3.us-east-2.amazonaws.com/deploy.yaml
+kubectl apply -f https://$QSS3BucketName.s3.$REGION.amazonaws.com/$QSS3KeyPrefix/assets/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
 
 #Download latest Rancher repository
-#helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-#helm fetch rancher-stable/rancher
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 helm fetch rancher-latest/rancher
 
@@ -43,29 +46,26 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 #Create the secret in the cluster:
 kubectl create secret tls tls-secret --key tls.key --cert tls.crt
 
-# Delete validatingwebhookconfiguration
-#kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
-
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
   --set hostname=$RancherURL  \
   --set ingress.tls.source=secret
 
 #Create Route53 Hosted Zone
-export CALLER_REF=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+CALLER_REF=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 MYMAC=`curl http://169.254.169.254/latest/meta-data/mac`
 VPCID=`curl http://169.254.169.254/latest/meta-data/network/interfaces/macs/$MYMAC/vpc-id`
 aws route53 create-hosted-zone --name $HostedZone --caller-reference $CALLER_REF --hosted-zone-config Comment="Rancher Domain,PrivateZone=True" --vpc VPCRegion=$REGION,VPCId=$VPCID
 
 #Extract Hosted Zone ID:
-export ZONE_ID=`aws route53 list-hosted-zones-by-name |  jq --arg name "${HostedZone}." -r '.HostedZones | .[] | select(.Name=="\($name)") | .Id' | cut -d"/" -f3`
+ZONE_ID=`aws route53 list-hosted-zones-by-name |  jq --arg name "${HostedZone}." -r '.HostedZones | .[] | select(.Name=="\($name)") | .Id' | cut -d"/" -f3`
 
 #Create Resource Record Set
-export NLB=`kubectl get svc -n ingress-nginx -o json | jq -r ".items[0].status.loadBalancer.ingress[0].hostname"`
-export NLB_NAME=`echo $NLB | cut -d"-" -f1`
+NLB=`kubectl get svc -n ingress-nginx -o json | jq -r ".items[0].status.loadBalancer.ingress[0].hostname"`
+NLB_NAME=`echo $NLB | cut -d"-" -f1`
 
 #Create Resource Record Set
-export NLB_HOSTEDZONE=`aws elbv2 describe-load-balancers --region $REGION --names $NLB_NAME | jq -r ".LoadBalancers[0].CanonicalHostedZoneId"`
+NLB_HOSTEDZONE=`aws elbv2 describe-load-balancers --region $REGION --names $NLB_NAME | jq -r ".LoadBalancers[0].CanonicalHostedZoneId"`
 
 cat > rancher-record-set.json <<EOF
 {
