@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Deploys the Rancher helm chart into an existing Kubernetes cluster (qs-1qqod7mii)"
 Metadata:
-  QuickStartDocumentation:
-    EntrypointName: "Launch into an existing Kubernetes cluster"
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:

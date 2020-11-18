@@ -1,4 +1,1 @@
-The following Regions are currently supported by this Quick Start.
-
-- _us-east-1 (N. Virginia)_ (EXAMPLE)
-- _us-east-2 (Ohio)_ (EXAMPLE)
+This Quick Start is supported in any AWS Region in which Amazon Elastic Kubernetes Service (EKS) is supported. See the https://docs.aws.amazon.com/general/latest/gr/eks.html[EKS Documentation] page for a list of supported Regions.
