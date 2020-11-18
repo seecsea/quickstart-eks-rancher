@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Deploys the Rancher helm chart into an existing Kubernetes cluster (qs-1qqod7mii)"
+Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Launch into an existing Kubernetes cluster"
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Rancher for EKS configuration
+        Parameters:
+          - KubeClusterName
+          - Namespace
+      - Label:
+          default: AWS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3BucketRegion
+          - QSS3KeyPrefix
+    ParameterLabels:
+      KubeClusterName:
+        default: EKS cluster name
+      Namespace:
+        default: Kubernetes namespace
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket region
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+Parameters:
+  KubeClusterName:
+    Type: String
+    Description: Name of the EKS cluster to deploy Rancher into.
+  Namespace:
+    Type: String
+    Default: cattle-system
+    Description: Kubernetes namespace to deploy Rancher into, default is cattle-system.
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Default: aws-quickstart
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/).
+    Default: quickstart-eks-rancher/
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    Type: String
+Resources:
+# Create Rancher Namespace
+  RancherNamespace:
+    Type: "Custom::KubeManifest"
+    Properties:
+      ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
+      ClusterName: !Ref KubeClusterName
+      Manifest:
+        kind: Namespace
+        apiVersion: v1
+        metadata:
+          name: !Ref Namespace
+
+  #Create the secret in EKS cluster:
+  RancherSecret:
+    Type: "Custom::KubeManifest"
+    DependsOn: RancherNamespace
+    Properties:
+      ServiceToken: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:EKS-QuickStart-KubeManifest-${KubeClusterName}"
+      ClusterName: !Ref KubeClusterName
+      Manifest:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: rancher-secret
+        data:
+          tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURLRENDQWhBQ0NRRFUySmFzZm96WmJEQU5CZ2txaGtpRzl3MEJBUXNGQURCV01Ta3dKd1lEVlFRRERDQnkKWVc1amFHVnlaV3R6Y1hNdVlYZHpZMnh2ZFdSaWRXbHNaR1Z5TG1OdmJURXBNQ2NHQTFVRUNnd2djbUZ1WTJobApjbVZyYzNGekxtRjNjMk5zYjNWa1luVnBiR1JsY2k1amIyMHdIaGNOTWpBeE1EQXpNREkwTXpRMFdoY05NakV4Ck1EQXpNREkwTXpRMFdqQldNU2t3SndZRFZRUUREQ0J5WVc1amFHVnlaV3R6Y1hNdVlYZHpZMnh2ZFdSaWRXbHMKWkdWeUxtTnZiVEVwTUNjR0ExVUVDZ3dnY21GdVkyaGxjbVZyYzNGekxtRjNjMk5zYjNWa1luVnBiR1JsY2k1agpiMjB3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRENNaFVXTTQyd05rdGd6U2ZlCjlHYm5nRHhDWml6ajFHaVB6bVBEcDU3Smt0UGhENHQra21Qek9neFV6K0hmaHpkTHBHMVZUU3pWVkVnYmVBTTIKS0tqZUlXa3lQT3FzcDdLeWFPVkJZdWlVSkJ2ZnFmSGhJbG4vN09DcFBiN3FnRTY3cUNwSzNEVzJPY1lhMS9uUApiTGcwOFY0dVIvc2ZFZFhnZFZBTXJocTl5V1l4aVNOb3VCQi9zVTlBd25sNWpqWDl4NSt2d05nY2drWmdYazlsCkV5Z3R1VEMrdGRmSzlIckVDTVlRRUtDV0RCWFo1b1dLWlpwRkVPUVYyWi91aWM3Q2pmZHNtcFpoVEVyYW81VTEKWGpFTnMyeVhWNHYyQmdFejAvTDBKMzF0TStWZlNyKzhBMWlsNUozNmlVQU0zVk9GS3NBbnptTDQ2TEJ2UEZueApVdXE1QWdNQkFBRXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRE1mNFYrM3AvSE5kQWFnK0UzT2sxZ3lBY2ZLCkRLSUlTYVZYUi85V09XblNrT250bXpLZWY4dnNrdWorR25GT09aajJLNmYzbDBhc0pXWk15eWhueUo2VVRyOFMKQzBXTGNEcFNJQnRsN2ZNNXc0aWMzd2pFKzdpSHF2UEIrUzZZcWtsSkxrelBpSEtjTVlXK2RPbDBXeGh6am1SUQowa3B5enNXK2J4bHV1TUMwNHRSVkN4bll6T2lHZFVDM0dQRGkwSGZjZ09palZqQ1hYYlJ1Q2Z4b05jM3REOTBFCkdaYjJhcFNkcGdnM3lJeEUrVW5rR2djY2FBbWFFblJnZWVPck1QM2lKS2hNd0t2MGwwaGdjUFlEZkM0dVlOSlYKdFBOOXZvdnZnUWhuT3pZREMvcENJL1ZUdGhlK3ZNdHdHTlRITVFCS1dmd3VEcFdESllLenpGZ3hkcEk9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=
+          tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2d0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktrd2dnU2xBZ0VBQW9JQkFRRENNaFVXTTQyd05rdGcKelNmZTlHYm5nRHhDWml6ajFHaVB6bVBEcDU3Smt0UGhENHQra21Qek9neFV6K0hmaHpkTHBHMVZUU3pWVkVnYgplQU0yS0tqZUlXa3lQT3FzcDdLeWFPVkJZdWlVSkJ2ZnFmSGhJbG4vN09DcFBiN3FnRTY3cUNwSzNEVzJPY1lhCjEvblBiTGcwOFY0dVIvc2ZFZFhnZFZBTXJocTl5V1l4aVNOb3VCQi9zVTlBd25sNWpqWDl4NSt2d05nY2drWmcKWGs5bEV5Z3R1VEMrdGRmSzlIckVDTVlRRUtDV0RCWFo1b1dLWlpwRkVPUVYyWi91aWM3Q2pmZHNtcFpoVEVyYQpvNVUxWGpFTnMyeVhWNHYyQmdFejAvTDBKMzF0TStWZlNyKzhBMWlsNUozNmlVQU0zVk9GS3NBbnptTDQ2TEJ2ClBGbnhVdXE1QWdNQkFBRUNnZ0VBWE9qUE0rY0laQVVsL1ROS1h4NDVXWXI5eVpyTzRWWFBqUFhtdjBZajd6YmoKVGlzOHh4ck0zU0twb2E0djE5eitkSjgvZSs5SGd1MG03cFYxbStUS0hqU0grdlF3SnRpNDR5alNmbjBPMzBtRApXSGdiZEdZVi94N2F3YjM3Nkgvb3ExbWltbHhQQ2xjTDArMys0K0dWSkNkU3N2dlhScDhtMzVQZzc2QWd4U21QCjhMVVJnc0JjVE9Wd0VxOURjeWtpYkhiYTV4eTIxenNsQU9MbmE3RGVxMDdIcFBUWlNaNUxGRkJ2dVJ3UGxDeTYKSkZLQ0NwUW9XWjlFTFFIR3RIQUl3N054R3FEeE95UFo5aUpZL2RmRjYzQUxtaStvbFJtcnU2ZC9EMDd2STdOSwoxaHVvQjhKTlpsZ1Ntc0kxdWdKS3U1OXMwaTdkdkJFaTJnVGVtM3dNdlFLQmdRRGhjbmdZQS9LejE0cWE5MjExCjNjcDBVaWJCSVJ4a2pTbzRldGVkaUZ0RlVLUkpabUJtVjBiWTRJWm1ucG1aa0xaS2kyOU5iMldOM1VpL2V3Ri8KakJKYmYrUEhWL2RvUnpiS0tXYTdRY3FqNEhHSGU2QnQ5SXVCSWQxaVpvd1hLT3B6R1ZDVlc0QTVQSHhSVkdLbworbnFORDY5NGI3UHY1aUxkVzFPcDB0NUR2d0tCZ1FEY2cyUkZ0dkN3M1RUcExPN1hjM1dvWFJFUVdGR0lUbm9DClFPLzViNk1uUmVjaUxsc084MkkzLzFxNXNyT2NialRkSjJLQXNCRTJBWE5FQzF4TC8zMWNGMjZGMHdiT0pyYkMKbncrVDdDUHZoR3d2NU5DTEp0UlAxdVFBTW5FSHBvcy9sN1ZyTTBVRmpyVWNzUldwT0VrZHVQWGVGTDIxZDlmTgp0bDZwTFJzUGh3S0JnUUNzUG4vQW9XdVJ1YkQ5R3VNM2RUK1R4WncwVys3TWFBb0U0dDNQVHZta3FLc01KVHFyCmxpemIwQmIvV2xjeU81ejZzVE5WYnpHZ3hKc3JLSGlKa1dRSklsbk4yTWgrbEVJcERKNmZuUEdNYVJOMEZxRUkKd1JqQWpUWU9VeGpmTFBTTEFhRk9xM3o0dmR5aGFwNkNTZlROeDFraDQvNE80TDVzYnJVcC82Q3ZFd0tCZ1FEUAp1dzg1QlcrVWphNk1nd0cxQVZXemQ0amRwdldYdktYL2ZZRVRyL0U0ekFkREVmeENCMUZkZ3piS2ZPZnEwMzhGClgxYlIrQXNlbnhzZzNMcmo5Umo1S2pHNTYrUWJUQ2tiQ3BDNFB0cFRocUlNTkRlby9yay9SU2FnY09ROTJzeU8KNmJIRC9SWm1kOXR4M2ZpVDR5d3R6ZElBbGZWcEFDN1I0WjBuTGhDeC9RS0JnUUNuMDFTajY1WHhoZmNUSkVndQpMNDBPUTNGT1JCbjZsV2tIa2FTMlQybVJIaFp3Vk9lRCtXanEzWnBWb2YyazI3cDZ6eStqWVpNcDR2OGlPRTdOCkN0Wk1TZWVod3ErL2dSUDBFZUFPOVZQWGR5SkZmTkhIMm5zdTc3TWlLNkp2S3o5aUVYNXE4Ulp4OE9yWDBKTGIKcjFkYlpMT2JkWWxxYzFhWmVBWm52S01qUUE9PQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0t
+        type: kubernetes.io/tls
+
+  #Install Rancher on EKS Cluster      
+  RancherInstall:
+    Type: "AWSQS::Kubernetes::Helm"
+    DependsOn: RancherNamespace
+    Properties:
+      ClusterID: !Ref KubeClusterName
+      Namespace: !Ref Namespace
+      Repository: https://releases.rancher.com/server-charts/stable
+      Chart: rancher-stable/rancher
+      Name: rancher-stable
+      Values: 
+        hostname: ranchereksqs.awscloudbuilder.com
+        ingress.tls.source: secret
+Outputs:
+  RancherReleaseName:
+    Value: !Ref RancherNamespace

@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Error><Code>AccessDenied</Code><Message>Access Denied</Message><RequestId>1CF10EE192E13F3B</RequestId><HostId>KKcqw0oG+W9gnKv/McojoXlZ1xKEFY6WHuRIPCjIEHPSwzS5Uon+tKMA1AmNMrdYXduf3qniqxI=</HostId></Error>

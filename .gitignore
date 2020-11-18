@@ -1,0 +1,4 @@
+.idea/
+.taskcat.yml
+functions/.DS_Store
+functions/source/rancher_uninstall.sh
