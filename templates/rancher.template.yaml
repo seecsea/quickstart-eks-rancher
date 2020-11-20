@@ -12,19 +12,23 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Network Configuration
+          default: Network configuration
         Parameters:
           - VPCID
           - PrivateSubnet1ID
           - PrivateSubnet2ID
       - Label:
-          default: EKS Configuration
+          default: EKS configuration
         Parameters:
           - EKSClusterName
           - IAMRole
           - SecurityGroup
       - Label:
-          default: AWS Quick Start Configuration
+          default: Rancher configuration
+        Parameters:
+          - DomainName
+      - Label:
+          default: AWS Quick Start configuration
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -48,6 +52,8 @@ Metadata:
         default: IAM Role
       SecurityGroup:
         default: EC2 Security Group
+      DomainName:
+        default: Domain name
 
 Parameters:
   PrivateSubnet1ID:
