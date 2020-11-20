@@ -14,14 +14,9 @@ Metadata:
       - Label:
           default: Network Configuration
         Parameters:
-          - VPCCIDR
           - VPCID
-          - PrivateSubnet1CIDR
           - PrivateSubnet1ID
-          - PrivateSubnet2CIDR
           - PrivateSubnet2ID
-          - PublicSubnet1CIDR
-          - PublicSubnet2CIDR
       - Label:
           default: EKS Configuration
         Parameters:
@@ -35,26 +30,16 @@ Metadata:
           - QSS3KeyPrefix
           - QSS3BucketRegion
     ParameterLabels:
-      PrivateSubnet1CIDR:
-        default: Private Subnet 1 CIDR
       PrivateSubnet1ID:
         default: Private Subnet 1 ID
-      PrivateSubnet2CIDR:
-        default: Private Subnet 2 CIDR
       PrivateSubnet2ID:
         default: Private Subnet 2 ID
-      PublicSubnet1CIDR:
-        default: Public Subnet 1 CIDR
-      PublicSubnet2CIDR:
-        default: Public Subnet 2 CIDR
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
       QSS3BucketRegion:
         default: Quick Start S3 Bucket Region
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
-      VPCCIDR:
-        default: VPC CIDR
       VPCID:
         default: VPC ID
       EKSClusterName:
@@ -65,36 +50,12 @@ Metadata:
         default: EC2 Security Group
 
 Parameters:
-  PrivateSubnet1CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Default: 10.0.0.0/19
-    Description: CIDR block for private subnet 1 located in Availability Zone 1.
-    Type: String
   PrivateSubnet1ID:
     Description: ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)
     Type: AWS::EC2::Subnet::Id
-  PrivateSubnet2CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Default: 10.0.32.0/19
-    Description: CIDR block for private subnet 2 located in Availability Zone 2.
-    Type: String
   PrivateSubnet2ID:
     Description: ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
     Type: AWS::EC2::Subnet::Id
-  PublicSubnet1CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Default: 10.0.128.0/20
-    Description: CIDR Block for the public DMZ subnet 1 located in Availability Zone 1.
-    Type: String
-  PublicSubnet2CIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Default: 10.0.144.0/20
-    Description: CIDR Block for the public DMZ subnet 2 located in Availability Zone 2
-    Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
@@ -117,12 +78,6 @@ Parameters:
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
-    Type: String
-  VPCCIDR:
-    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
-    Default: 10.0.0.0/16
-    Description: CIDR Block for the VPC
     Type: String
   VPCID:
     Description: ID of the VPC (e.g., vpc-0343606e)
@@ -253,9 +208,6 @@ Resources:
         parameters:
           StackName:
             description: "Stack Name Input for cfn resource signal"
-            type: "String"
-          VPCCIDR:
-            description: VPC CIDR
             type: "String"
           QSS3BucketName:
             description: "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
@@ -505,7 +457,6 @@ Resources:
                   qs_region = event['ResourceProperties']['QSS3BucketRegion']
                   qs_bucket_prefix = event['ResourceProperties']['QSS3KeyPrefix']
                   subnet_id = event['ResourceProperties']['PrivateSubnet1ID']
-                  vpc_cidr = event['ResourceProperties']['VPCCIDR']
                   aws_region = event['ResourceProperties']['AWSRegion']
                   eks_cluster = event['ResourceProperties']['EKSClusterName']
                   iam_role = event['ResourceProperties']['IAMRole']
@@ -534,9 +485,6 @@ Resources:
                           ],
                           'PrivateSubnet1ID': [
                               subnet_id
-                          ],
-                          'VPCCIDR': [
-                              vpc_cidr
                           ],
                           'AWSRegion': [
                               aws_region
@@ -585,7 +533,6 @@ Resources:
       QSS3KeyPrefix: !Ref QSS3KeyPrefix
       AutomationAssumeRole: !GetAtt SSMAutomationRole.Arn
       PrivateSubnet1ID: !Ref PrivateSubnet1ID
-      VPCCIDR: !Ref VPCCIDR
       AWSRegion: !Ref 'AWS::Region'
       EKSClusterName: !Ref EKSClusterName
       IAMRole: !Ref 'IAMRole'

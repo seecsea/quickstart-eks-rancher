@@ -3,9 +3,21 @@
 
 == Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
+[square]
+* If a DNS domain option was specified, login to EKS Bastion host and execute: _curl -k \https://rancher.[domain specified]/_
+* If a DNS domain option was *NOT* specified, login to EKS Bastion host and execute: _curl -k \https://rancher.aws.private/_
+
+The output should look something like this:
+----
+[ec2-user@ip-10-10-10-10 ~]$ curl -k  https://rancher.aws.private/
+{"type":"collection","links":{"self":"https://rancher.aws.private/"},"actions":{},"pagination":{"limit":1000,"total":4},"sort":{"order":"asc","reverse":"https://rancher.aws.private/?order=desc"},"resourceType":"apiRoot","data":[{"apiVersion":{"group":"meta.cattle.io","path":"/me
+ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aws.private/meta/apiroots","root":"https://rancher.aws.private/meta","schemas":"https://rancher.aws.private/meta/schemas","self":"https://rancher.aws.private/meta" ... [snipped]
+----
 
 == Post deployment steps
-// If Post-deployment steps are required, add them here. If not, remove the heading
+1. Deploy a RDP Bastion host into a public subnet of the VPC which hosts the EKS worker nodes
+2. Open a browser and enter the Rancher console URL as shown above
+3. Complete the initial configurations such as creating an admin password
 
 == Best practices for using {partner-product-short-name} on AWS
 // Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
