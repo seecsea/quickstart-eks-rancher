@@ -4,13 +4,9 @@
 :template_aws_iam_role:
 :template_aws_lambda_function:
 :template_aws_ssm_document:
-:template_awsqs_kubernetes_helm:
 :template_cloudformation:
 :template_custom_executessmautomation:
-:template_custom_kubemanifest:
 :template_executessmautomation:
 :template_iam:
-:template_kubemanifest:
-:template_kubernetes:
 :template_lambda:
 :template_ssm:

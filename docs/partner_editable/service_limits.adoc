@@ -7,4 +7,6 @@
 |IAM roles |2
 |Network Load Balancers |1
 |EC2 instances |1
+|Route 53 Private Hosted Zone|1
+|Route 53 Private Hosted Zone Entry|1
 |===

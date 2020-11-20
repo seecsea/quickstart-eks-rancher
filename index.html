@@ -1051,6 +1051,14 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EC2 instances</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route 53 Private Hosted Zone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route 53 Private Hosted Zone Entry</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1208,22 +1216,10 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR
-(<code>VPCCIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR Block for the VPC</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID
 (<code>VPCID</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ID of the VPC (e.g., vpc-0343606e)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 1 CIDR
-(<code>PrivateSubnet1CIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/19</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 1 located in Availability Zone 1.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 1 ID
@@ -1232,28 +1228,10 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <td class="tableblock halign-left valign-top"><p class="tableblock">ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 2 CIDR
-(<code>PrivateSubnet2CIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.32.0/19</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 2 located in Availability Zone 2.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Private Subnet 2 ID
 (<code>PrivateSubnet2ID</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Public Subnet 1 CIDR
-(<code>PublicSubnet1CIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.128.0/20</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR Block for the public DMZ subnet 1 located in Availability Zone 1.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Public Subnet 2 CIDR
-(<code>PublicSubnet2CIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.144.0/20</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR Block for the public DMZ subnet 2 located in Availability Zone 2</p></td>
 </tr>
 </tbody>
 </table>
@@ -1358,13 +1336,44 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="sect1">
 <h2 id="_test_the_deployment">Test the deployment</h2>
 <div class="sectionbody">
-
+<div class="ulist square">
+<ul class="square">
+<li>
+<p>If a DNS domain option was specified, login to EKS Bastion host and execute: <em>curl -k https://rancher.[domain specified]/</em></p>
+</li>
+<li>
+<p>If a DNS domain option was <strong>NOT</strong> specified, login to EKS Bastion host and execute: <em>curl -k https://rancher.aws.private/</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The output should look something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[ec2-user@ip-10-10-10-10 ~]$ curl -k  https://rancher.aws.private/
+{"type":"collection","links":{"self":"https://rancher.aws.private/"},"actions":{},"pagination":{"limit":1000,"total":4},"sort":{"order":"asc","reverse":"https://rancher.aws.private/?order=desc"},"resourceType":"apiRoot","data":[{"apiVersion":{"group":"meta.cattle.io","path":"/me
+ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aws.private/meta/apiroots","root":"https://rancher.aws.private/meta","schemas":"https://rancher.aws.private/meta/schemas","self":"https://rancher.aws.private/meta" ... [snipped]</pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_post_deployment_steps">Post deployment steps</h2>
 <div class="sectionbody">
-
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Deploy a RDP Bastion host into a public subnet of the VPC which hosts the EKS worker nodes</p>
+</li>
+<li>
+<p>Open a browser and enter the Rancher console URL as shown above</p>
+</li>
+<li>
+<p>Complete the initial configurations such as creating an admin password</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect1">

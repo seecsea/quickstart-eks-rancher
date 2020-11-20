@@ -2,15 +2,10 @@
 .Network Configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
-|Parameter label (name) |Default value|Description|VPC CIDR
-(`VPCCIDR`)|`10.0.0.0/16`|CIDR Block for the VPC|VPC ID
-(`VPCID`)|`**__Requires input__**`|ID of the VPC (e.g., vpc-0343606e)|Private Subnet 1 CIDR
-(`PrivateSubnet1CIDR`)|`10.0.0.0/19`|CIDR block for private subnet 1 located in Availability Zone 1.|Private Subnet 1 ID
-(`PrivateSubnet1ID`)|`**__Requires input__**`|ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)|Private Subnet 2 CIDR
-(`PrivateSubnet2CIDR`)|`10.0.32.0/19`|CIDR block for private subnet 2 located in Availability Zone 2.|Private Subnet 2 ID
-(`PrivateSubnet2ID`)|`**__Requires input__**`|ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)|Public Subnet 1 CIDR
-(`PublicSubnet1CIDR`)|`10.0.128.0/20`|CIDR Block for the public DMZ subnet 1 located in Availability Zone 1.|Public Subnet 2 CIDR
-(`PublicSubnet2CIDR`)|`10.0.144.0/20`|CIDR Block for the public DMZ subnet 2 located in Availability Zone 2
+|Parameter label (name) |Default value|Description|VPC ID
+(`VPCID`)|`**__Requires input__**`|ID of the VPC (e.g., vpc-0343606e)|Private Subnet 1 ID
+(`PrivateSubnet1ID`)|`**__Requires input__**`|ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)|Private Subnet 2 ID
+(`PrivateSubnet2ID`)|`**__Requires input__**`|ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
 |===
 .EKS Configuration
 [width="100%",cols="16%,11%,73%",options="header",]
