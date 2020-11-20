@@ -377,7 +377,7 @@ Resources:
               CloudWatchLogGroupName: !Sub '/aws/Quick_Start/${AWS::StackName}'
             Parameters:
               commands:
-                - wget -O /tmp/rancher_install.sh https://{{QSS3BucketName}}.s3.{{QSS3BucketRegion}}.amazonaws.com/{{QSS3KeyPrefix}}/assets/rancher_install.sh
+                - wget -O /tmp/rancher_install.sh https://{{QSS3BucketName}}.s3.{{QSS3BucketRegion}}.amazonaws.com/{{QSS3KeyPrefix}}functions/source/rancher_install.sh
                 - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{QSS3BucketRegion}} {{QSS3BucketName}} {{QSS3KeyPrefix}} {{EKSClusterName}} {{DomainName}}'
         # Determines if CFN Needs to be Signaled or if Work flow should just end
         - name: CFNSignalEnd
