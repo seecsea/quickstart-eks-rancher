@@ -1,5 +1,5 @@
 
-.Network Configuration
+.Network configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|VPC ID
@@ -7,7 +7,7 @@
 (`PrivateSubnet1ID`)|`**__Requires input__**`|ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)|Private Subnet 2 ID
 (`PrivateSubnet2ID`)|`**__Requires input__**`|ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
 |===
-.EKS Configuration
+.EKS configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|EKS Cluster Name
@@ -15,7 +15,13 @@
 (`IAMRole`)|`**__Requires input__**`|IAM role for the installer to use. The role should be a member of the system:masters group in the EKS config map|EC2 Security Group
 (`SecurityGroup`)|`**__Requires input__**`|Security group for the installer to use
 |===
-.AWS Quick Start Configuration
+.Rancher configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Domain name
+(`DomainName`)|`**__Requires input__**`|DNS domain name that users can use to access the Rancher console.
+|===
+.AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Quick Start S3 Bucket Name
