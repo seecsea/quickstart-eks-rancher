@@ -246,7 +246,10 @@ Resources:
           DomainName:
             description: "DNS domain name that users can use to access the Rancher console."
             type: "String"
-
+          Region:
+	          description: Region of deployment
+            type: String
+            default: !Ref "AWS::Region"
         mainSteps:
         - name:  CreateStack
           action: aws:createStack
@@ -335,6 +338,22 @@ Resources:
                           Effect: Allow
                     Roles:
                     - !Ref IAMRole
+	              RancherManagedEKSPolicy:
+                  Type: 'AWS::IAM::ManagedPolicy'
+                  Properties:
+                    PolicyDocument:
+                      Version: '2012-10-17'
+                      Statement:
+                        - Action:
+                            - cloudformation:*
+                            - eks:*
+                            - ec2:DescribeSecurityGroups
+                            - ec2:DescribeSubnets
+                            - ec2:DescribeVpcs
+                          Resource: "*"
+                          Effect: Allow
+                    Roles:
+                    - !Ref IAMRole
                 IamInstanceProfile:
                   Type: "AWS::IAM::InstanceProfile"
                   Properties:
@@ -384,7 +403,7 @@ Resources:
             Parameters:
               commands:
                 - wget -O /tmp/rancher_install.sh https://{{QSS3BucketName}}.s3.{{QSS3BucketRegion}}.amazonaws.com/{{QSS3KeyPrefix}}functions/source/rancher_install.sh
-                - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{QSS3BucketRegion}} {{QSS3BucketName}} {{QSS3KeyPrefix}} {{EKSClusterName}} {{DomainName}}'
+                - /bin/su - ec2-user -c 'cd /tmp && sh -x rancher_install.sh {{Region}} {{QSS3BucketName}} {{QSS3KeyPrefix}} {{EKSClusterName}} {{DomainName}}'
         # Determines if CFN Needs to be Signaled or if Work flow should just end
         - name: CFNSignalEnd
           action: aws:branch
