@@ -14,9 +14,7 @@ Metadata:
       - Label:
           default: Network configuration
         Parameters:
-          - VPCID
           - PrivateSubnet1ID
-          - PrivateSubnet2ID
       - Label:
           default: EKS configuration
         Parameters:
@@ -36,16 +34,12 @@ Metadata:
     ParameterLabels:
       PrivateSubnet1ID:
         default: Private Subnet 1 ID
-      PrivateSubnet2ID:
-        default: Private Subnet 2 ID
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
       QSS3BucketRegion:
         default: Quick Start S3 Bucket Region
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
-      VPCID:
-        default: VPC ID
       EKSClusterName:
         default: EKS Cluster Name
       IAMRole:
@@ -58,9 +52,6 @@ Metadata:
 Parameters:
   PrivateSubnet1ID:
     Description: ID of the private subnet 1 in Availability Zone 1 (e.g., subnet-a0246dcd)
-    Type: AWS::EC2::Subnet::Id
-  PrivateSubnet2ID:
-    Description: ID of the private subnet 2 in Availability Zone 2 (e.g., subnet-a0246dcd)
     Type: AWS::EC2::Subnet::Id
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
@@ -85,9 +76,6 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
     Type: String
-  VPCID:
-    Description: ID of the VPC (e.g., vpc-0343606e)
-    Type: AWS::EC2::VPC::Id
   EKSClusterName:
     AllowedPattern: ^EKS-[0-9a-zA-Z]{8}$
     Description: EKS Cluster Name
@@ -101,18 +89,6 @@ Parameters:
   DomainName:
     Description: DNS domain name that users can use to access the Rancher console.
     Type: String
-
-Rules:
-  SubnetsInVPC:
-    Assertions:
-      - Assert: !EachMemberIn
-          - !ValueOfAll
-            - AWS::EC2::Subnet::Id
-            - VpcId
-          - !RefAll 'AWS::EC2::VPC::Id'
-        AssertDescription: All subnets must be in the VPC
-Conditions:
-  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 
 Resources:
   SSMAutomationRole:
@@ -247,8 +223,8 @@ Resources:
             description: "DNS domain name that users can use to access the Rancher console."
             type: "String"
           Region:
-	          description: Region of deployment
-            type: String
+            description: "DNS domain name that users can use to access the Rancher console."
+            type: "String"
             default: !Ref "AWS::Region"
         mainSteps:
         - name:  CreateStack
@@ -338,7 +314,7 @@ Resources:
                           Effect: Allow
                     Roles:
                     - !Ref IAMRole
-	              RancherManagedEKSPolicy:
+                RancherManagedEKSPolicy:
                   Type: 'AWS::IAM::ManagedPolicy'
                   Properties:
                     PolicyDocument:
@@ -451,7 +427,6 @@ Resources:
           inputs:
             StackName: "InstallRancher"
   LambdaSSMExecute:
-    DependsOn: LambdaSSMRole
     Type: AWS::Lambda::Function
     Properties:
       Description: Executes SSM Automation Documents
@@ -547,7 +522,6 @@ Resources:
                   print(error_msg)
                   cfnresponse.send(event, context, FAILED, error_msg)
   ExecuteSSMAutomation:
-    DependsOn: LambdaSSMExecute
     Type: Custom::ExecuteSSMAutomation
     Properties: 
       ServiceToken: !GetAtt LambdaSSMExecute.Arn
@@ -573,7 +547,6 @@ Resources:
         Count: 1
     DependsOn: 
       - ExecuteSSMAutomation
-      - SSMWaitHandle
     Properties: 
       Handle: 
         Ref: "SSMWaitHandle"
