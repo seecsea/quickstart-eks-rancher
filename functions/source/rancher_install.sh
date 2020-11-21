@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if [ $# -lt 4 ]; then
-    echo "I need a minimum of 4 arguments to proceed. REGION, QSS3BucketName, QSS3KeyPrefix, EKSCLUSTERNAME, (optional - domain name)" && exit 1
+if [ $# -lt 5 ]; then
+    echo "I need a minimum of 5 arguments to proceed. REGION, QSS3BucketName, QSS3KeyPrefix, QSS3BucketRegion, EKSCLUSTERNAME, (optional - domain name)" && exit 1
 fi
 
 REGION=$1
 QSS3BucketName=$2
 QSS3KeyPrefix=$3
-EKSCLUSTERNAME=$4
+QSS3BucketRegion=$4
+EKSCLUSTERNAME=$5
 [ -z "$5" ] && HostedZone="aws.private" || HostedZone="$5"
 RancherURL="rancher.$HostedZone"
 
@@ -29,7 +30,7 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 
 # Start by creating the mandatory resources for NGINX Ingress in your cluster:
 # Parameterize version 0.40.2
-kubectl apply -f https://$QSS3BucketName.s3.$REGION.amazonaws.com/$QSS3KeyPrefix/assets/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
+kubectl apply -f https://$QSS3BucketName.s3.$QSS3BucketRegion.amazonaws.com/$QSS3KeyPrefix/assets/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
 
 #Download latest Rancher repository
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
