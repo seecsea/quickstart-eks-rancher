@@ -9,7 +9,7 @@ QSS3BucketName=$2
 QSS3KeyPrefix=$3
 QSS3BucketRegion=$4
 EKSCLUSTERNAME=$5
-[ -z "$5" ] && HostedZone="aws.private" || HostedZone="$5"
+[ -z "$6" ] && HostedZone="aws.private" || HostedZone="$6"
 RancherURL="rancher.$HostedZone"
 
 KeyPrefix=${QSS3KeyPrefix%?}
