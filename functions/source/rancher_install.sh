@@ -12,6 +12,8 @@ EKSCLUSTERNAME=$5
 [ -z "$5" ] && HostedZone="aws.private" || HostedZone="$5"
 RancherURL="rancher.$HostedZone"
 
+KeyPrefix=${QSS3KeyPrefix%?}
+
 #Install jq for easier JSON object parsing
 sudo yum -y install jq
 
@@ -30,7 +32,12 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 
 # Start by creating the mandatory resources for NGINX Ingress in your cluster:
 # Parameterize version 0.40.2
-kubectl apply -f https://$QSS3BucketName.s3.$QSS3BucketRegion.amazonaws.com/$QSS3KeyPrefix/assets/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
+if [ $QSS3BucketName == 'aws-quickstart' ]
+then
+  kubectl apply -f https://$QSS3BucketName-$REGION.s3.$REGION.amazonaws.com/$KeyPrefix/functions/source/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
+else
+  kubectl apply -f https://$QSS3BucketName.s3.$QSS3BucketRegion.amazonaws.com/$KeyPrefix/functions/source/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
+fi
 
 #Download latest Rancher repository
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
