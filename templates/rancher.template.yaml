@@ -89,6 +89,10 @@ Parameters:
   DomainName:
     Description: DNS domain name that users can use to access the Rancher console.
     Type: String
+    Default: rancher.aws.private
+
+Conditions:
+  NoDomainSpecified: !Equals [ !Ref DomainName, '' ]
 
 Resources:
   SSMAutomationRole:
@@ -557,4 +561,4 @@ Resources:
       Count: 1
 Outputs:
   DomainName:
-    Value: !Ref DomainName
+    Value: !If [NoDomainSpecified, 'rancher.aws.private', !Ref DomainName]
