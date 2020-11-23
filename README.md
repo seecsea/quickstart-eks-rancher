@@ -1,1 +1,1 @@
-# rancher-eks-qs
+# rancher-eks-rancher
