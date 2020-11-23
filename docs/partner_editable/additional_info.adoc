@@ -23,18 +23,3 @@ Rancher verification and initial configuration::
 Uninstallation of Rancher::
 1. An uninstall script is included in the https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh[git repository.] It takes two parameters [AWS Region] [domain name].  Download it onto the EKS bastion host if you wish to uninstall rancher.
 2. From the bastion host, as ec2-user, run this command ``kubectl edit namespace cattle-system`` and remove the finalizer called ``controller.cattle.io/namespace-auth``. Second, execute the uninstall script (i.e. ``sh rancher_uninstall.sh us-east-2 my.domain``)
-
-== Best practices for using {partner-product-short-name} on AWS
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
-
-_Add any best practices for using the software._
-
-== Security
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
-
-_Add any security-related information._
-
-== Other useful information
-//Provide any other information of interest to users, especially focusing on areas where AWS or cloud usage differs from on-premises usage.
-
-_Add any other details that will help the customer use the software on AWS._
