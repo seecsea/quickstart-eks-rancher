@@ -1372,6 +1372,10 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 <div class="sect1">
 <h2 id="_post_deployment_steps">Post deployment steps</h2>
 <div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Rancher verification and initial configuration</dt>
+<dd>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1384,6 +1388,22 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 <p>Complete the initial configurations such as creating an admin password</p>
 </li>
 </ol>
+</div>
+</dd>
+<dt class="hdlist1">Uninstallation of Rancher</dt>
+<dd>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An uninstall script is included in the <a href="https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh">git repository.</a> It takes two parameters [AWS Region] [domain name].  Download it onto the EKS bastion host if you wish to uninstall rancher.</p>
+</li>
+<li>
+<p>From the bastion host, as ec2-user, run this command <code>kubectl edit namespace cattle-system</code> and remove the finalizer called <code>controller.cattle.io/namespace-auth</code>. Second, execute the uninstall script (i.e. <code>sh rancher_uninstall.sh us-east-2 my.domain</code>)</p>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
 </div>
 </div>
 </div>
