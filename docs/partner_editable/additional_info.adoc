@@ -15,9 +15,14 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 ----
 
 == Post deployment steps
+Rancher verification and initial configuration::
 1. Deploy a RDP Bastion host into a public subnet of the VPC which hosts the EKS worker nodes
 2. Open a browser and enter the Rancher console URL as shown above
 3. Complete the initial configurations such as creating an admin password
+
+Uninstallation of Rancher::
+1. An uninstall script is included in the https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh[git repository.] It takes two parameters [AWS Region] [domain name].  Download it onto the EKS bastion host if you wish to uninstall rancher.
+2. From the bastion host, as ec2-user, run this command ``kubectl edit namespace cattle-system`` and remove the finalizer called ``controller.cattle.io/namespace-auth``. Second, execute the uninstall script (i.e. ``sh rancher_uninstall.sh us-east-2 my.domain``)
 
 == Best practices for using {partner-product-short-name} on AWS
 // Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
