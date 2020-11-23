@@ -17,7 +17,7 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Domain name
-(`DomainName`)|`**__Requires input__**`|DNS domain name that users can use to access the Rancher console.
+(`DomainName`)|`rancher.aws.private`|DNS domain name that users can use to access the Rancher console.
 |===
 .AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]
