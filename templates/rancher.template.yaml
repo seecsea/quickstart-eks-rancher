@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
-  This template installs rancher in the EKS cluster in separate Availability Zones
-  inside a VPC.  The Rancher installation creates a NLB and Route 53 domain records
-  so more friendly access to the rancher URL.
-  This template creates Amazon EC2 Linux instance temporarily to execute kubectl
-  commands and terminates the instalce. (qs-1r7ttg5dl)
+  This template installs rancher in an EKS cluster spanning separate Availability Zones
+  inside a VPC.  The Rancher installation creates a Network Load Balancer and Route 53 domain records
+  to enable more friendly access to the rancher URL.
+  This template creates an Amazon EC2 Linux instance to execute kubectl
+  commands, and then terminates the instalce. (qs-1r7ttg5dl)
 
 Metadata:
   QuickStartDocumentation:
@@ -35,17 +35,17 @@ Metadata:
       PrivateSubnet1ID:
         default: Private Subnet 1 ID
       QSS3BucketName:
-        default: Quick Start S3 Bucket Name
+        default: Quick Start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 Bucket Region
+        default: Quick Start S3 bucket Region
       QSS3KeyPrefix:
-        default: Quick Start S3 Key Prefix
+        default: Quick Start S3 key prefix
       EKSClusterName:
-        default: EKS Cluster Name
+        default: EKS cluster name
       IAMRole:
-        default: IAM Role
+        default: IAM role
       SecurityGroup:
-        default: EC2 Security Group
+        default: EC2 security group
       DomainName:
         default: Domain name
 
@@ -78,7 +78,7 @@ Parameters:
     Type: String
   EKSClusterName:
     AllowedPattern: ^EKS-[0-9a-zA-Z]{8}$
-    Description: EKS Cluster Name
+    Description: EKS cluster name
     Type: String
   IAMRole:
     Description: IAM role for the installer to use. The role should be a member of the system:masters group in the EKS config map
