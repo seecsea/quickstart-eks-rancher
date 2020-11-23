@@ -555,3 +555,6 @@ Resources:
         Ref: "SSMWaitHandle"
       Timeout: "3600"
       Count: 1
+Outputs:
+  DomainName:
+    Value: !Ref DomainName
