@@ -4,4 +4,4 @@
 
 This guide provides instructions for deploying the {partner-product-short-name} Quick Start reference architecture on the AWS Cloud.
 
-This Quick Start is for users who want to deploy Rancher to manage their Kubernetes cluster(s).
+This Quick Start is for users who want to deploy Rancher to manage Kubernetes clusters.

@@ -2,7 +2,7 @@
 
 This Quick Start provides two deployment options:
 
-* *Deploy {partner-product-short-name} into a new EKS cluster*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, EKS cluster, and other infrastructure components. It then deploys {partner-product-short-name} into this new EKS cluster.
+* *Deploy {partner-product-short-name} into a new EKS cluster*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, Amazon EKS cluster, and other infrastructure components. It then deploys {partner-product-short-name} into this new EKS cluster.
 * *Deploy {partner-product-short-name} into an existing EKS cluster*. This option provisions {partner-product-short-name} in your existing AWS infrastructure.
 
-When deploying into a new EKS cluster, the https://aws.amazon.com/quickstart/architecture/amazon-eks/[Amazon EKS Architecture] Quick Start is deployed, with the option to then deploy the Rancher Quick Start into the new cluster pre-selected.
+When deploying into a new EKS cluster, the https://aws.amazon.com/quickstart/architecture/amazon-eks/[Amazon EKS^] Quick Start deploys with the option to deploy this Rancher Quick Start, the new cluster is selected by default.
