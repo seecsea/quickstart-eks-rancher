@@ -1,3 +1,3 @@
 // Include details about the license and how they can sign up. If no license is required, clarify that. 
 
-Rancher is open-source software, it does not require a license.
+Rancher is open-source software and does not require a license.

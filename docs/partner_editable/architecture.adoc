@@ -1,6 +1,6 @@
-Deploying this Quick Start for a new virtual private cloud (VPC) and new EKS cluster
-default parameters builds the following {partner-product-short-name} environment in the
-AWS Cloud.
+Deploying this Quick Start for a new virtual private cloud (VPC) and new Amazon EKS cluster
+using default parameters builds the following {partner-product-short-name} environment in the
+AWS Cloud:
 
 // Replace this example diagram with your own. Send us your source PowerPoint file. Be sure to follow our guidelines here : http://(we should include these points on our contributors giude)
 :xrefstyle: short
@@ -18,13 +18,13 @@ best practices, to provide you with your own virtual network on AWS.*
 ** Managed network address translation (NAT) gateways to allow outbound
 internet access for resources in the private subnets.*
 ** A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to EC2 instances in public and private subnets.*
+Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets.*
 * In the private subnets:
 ** An Amazon EKS cluster, which provides the Kubernetes control plane.*
 ** A group of Kubernetes nodes.*
-** Rancher deployed using AWS Systems Manager automation.
-** A network load balancer (NLB) for accessing the Rancher console.
+** Rancher deployment using AWS Systems Manager automation.
+** A Network Load Balancer for accessing the Rancher console.
 // Add bullet points for any additional components that are included in the deployment. Make sure that the additional components are also represented in the architecture diagram. End each bullet with a period.
-* A Route 53 DNS record for easily accessing the Rancher deployment.
+* A Route 53 DNS record for accessing the Rancher deployment.
 
-[.small]#*The template that deploys the Quick Start into an existing EKS cluster skips the components marked by asterisks and prompts you for your existing VPC configuration.#
+[.small]#*The template that deploys the Quick Start into an existing Amazon EKS cluster skips the components marked by asterisks and prompts you for your existing VPC configuration.#

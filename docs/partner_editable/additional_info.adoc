@@ -4,22 +4,22 @@
 == Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
 [square]
-* If a DNS domain option was specified, login to EKS Bastion host and execute: _curl -k \https://rancher.[domain specified]/_
-* If a DNS domain option was *NOT* specified, login to EKS Bastion host and execute: _curl -k \https://rancher.aws.private/_
+* If a DNS domain option was specified, log in to the Amazon EKS bastion host, and run: _curl -k \https://rancher.[domain specified]/_
+* If a DNS domain option was not specified, log in to the Amazon EKS bastion host, and run: _curl -k \https://rancher.aws.private/_
 
-The output should look something like this:
+The output should look like the following:
 ----
 [ec2-user@ip-10-10-10-10 ~]$ curl -k  https://rancher.aws.private/
 {"type":"collection","links":{"self":"https://rancher.aws.private/"},"actions":{},"pagination":{"limit":1000,"total":4},"sort":{"order":"asc","reverse":"https://rancher.aws.private/?order=desc"},"resourceType":"apiRoot","data":[{"apiVersion":{"group":"meta.cattle.io","path":"/me
 ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aws.private/meta/apiroots","root":"https://rancher.aws.private/meta","schemas":"https://rancher.aws.private/meta/schemas","self":"https://rancher.aws.private/meta" ... [snipped]
 ----
 
-== Post deployment steps
+== Post-deployment steps
 Rancher verification and initial configuration::
-1. Deploy a RDP Bastion host into a public subnet of the VPC which hosts the EKS worker nodes
-2. Open a browser and enter the Rancher console URL as shown above
-3. Complete the initial configurations such as creating an admin password
+1. Deploy an RDP bastion host into a public subnet of the VPC that hosts the EKS worker nodes.
+2. Open a browser, and navigate to the Rancher console URL.
+3. Complete the initial configurations, such as creating an administrator password.
 
-Uninstallation of Rancher::
-1. An uninstall script is included in the https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh[git repository.] It takes two parameters [AWS Region] [domain name].  Download it onto the EKS bastion host if you wish to uninstall rancher.
-2. From the bastion host, as ec2-user, run this command ``kubectl edit namespace cattle-system`` and remove the finalizer called ``controller.cattle.io/namespace-auth``. Second, execute the uninstall script (i.e. ``sh rancher_uninstall.sh us-east-2 my.domain``)
+Uninstalling Rancher::
+1. An uninstall script is included in the https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh[git repository^]. It requires parameters for [AWS Region] and [domain name]. If you want to uninstall rancher, download the script to the Amazon EKS bastion host.
+2. From the bastion host, as ec2-user, run ``kubectl edit namespace cattle-system``, and remove the finalizer called ``controller.cattle.io/namespace-auth``. 3. Run the uninstall script (that is, ``sh rancher_uninstall.sh us-east-2 my.domain``).
