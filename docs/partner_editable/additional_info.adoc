@@ -4,8 +4,8 @@
 == Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
 [square]
-* If a DNS domain option was specified, log in to the Amazon EKS bastion host, and run: _curl -k \https://rancher.[domain specified]/_
-* If a DNS domain option was not specified, log in to the Amazon EKS bastion host, and run: _curl -k \https://rancher.aws.private/_
+* If a DNS domain option was specified, log in to the Amazon EKS bastion host, and run `curl -k \https://rancher.[domain specified]/`
+* If a DNS domain option was not specified, log in to the Amazon EKS bastion host, and run `curl -k \https://rancher.aws.private/`
 
 The output should look like the following:
 ----
@@ -21,5 +21,6 @@ Rancher verification and initial configuration::
 3. Complete the initial configurations, such as creating an administrator password.
 
 Uninstalling Rancher::
-1. An uninstall script is included in the https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh[git repository^]. It requires parameters for [AWS Region] and [domain name]. If you want to uninstall rancher, download the script to the Amazon EKS bastion host.
-2. From the bastion host, as ec2-user, run ``kubectl edit namespace cattle-system``, and remove the finalizer called ``controller.cattle.io/namespace-auth``. 3. Run the uninstall script (that is, ``sh rancher_uninstall.sh us-east-2 my.domain``).
+1. An uninstall script is included in the https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh[git repository^]. It requires parameters for AWS Region and domain name. If you want to uninstall rancher, download the script to the Amazon EKS bastion host.
+2. From the bastion host, as ec2-user, run `kubectl edit namespace cattle-system`, and remove the finalizer called `controller.cattle.io/namespace-auth`.
+3. Run the uninstall script (that is, `sh rancher_uninstall.sh us-east-2 my.domain`).
