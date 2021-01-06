@@ -2,6 +2,6 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-Rancher is a software stack for teams that want to adopt containers. It addresses the operational and security challenges of managing multiple Kubernetes clusters, while providing DevOps teams with integrated tools for running containerized workloads.
+Rancher is a software stack for teams that want to adopt containers. It addresses the operational and security challenges of managing multiple Kubernetes clusters while providing DevOps teams with integrated tools for running containerized workloads.
 
 AWS customers can use this Quick Start to either deploy Rancher into an existing Amazon Elastic Kubernetes Service (Amazon EKS) cluster or a new EKS cluster with Rancher automatically deployed for cluster management.
