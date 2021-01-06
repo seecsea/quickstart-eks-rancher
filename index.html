@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="generator" content="Asciidoctor 2.0.12">
 <title>Rancher on the AWS Cloud</title>
 <style>
 
@@ -791,7 +791,7 @@ p.footer-text a{color:#d7d8d8}
 <ul class="sectlevel1">
 <li><a href="#_overview">Overview</a></li>
 <li><a href="#_rancher_on_aws">Rancher on AWS</a></li>
-<li><a href="#_cost">Cost</a></li>
+<li><a href="#_aws_costs">AWS costs</a></li>
 <li><a href="#_software_licenses">Software licenses</a></li>
 <li><a href="#_architecture">Architecture</a></li>
 <li><a href="#_planning_the_deployment">Planning the deployment</a>
@@ -809,9 +809,8 @@ p.footer-text a{color:#d7d8d8}
 </ul>
 </li>
 <li><a href="#_test_the_deployment">Test the deployment</a></li>
-<li><a href="#_post_deployment_steps">Post deployment steps</a></li>
+<li><a href="#_post_deployment_steps">Post-deployment steps</a></li>
 <li><a href="#_faq">FAQ</a></li>
-<li><a href="#_troubleshooting">Troubleshooting</a></li>
 <li><a href="#_send_us_feedback">Send us feedback</a></li>
 <li><a href="#_quick_start_reference_deployments">Quick Start reference deployments</a></li>
 <li><a href="#_github_repository">GitHub repository</a></li>
@@ -830,9 +829,9 @@ p.footer-text a{color:#d7d8d8}
 </div>
 </div>
 <div class="paragraph text-center">
-<p><strong>November 2020</strong><br>
+<p><strong>January 2021</strong><br>
 <em>Nelson Roberts, Rancher Labs</em><br>
-<em>Andrew Park, Keith Andruch, and Dave May, AWS Partner Solutions Architects</em></p>
+<em>Andrew Park, Keith Andruch, and Dave May, AWS Quick Start team</em></p>
 </div>
 <div class="admonitionblock tip text-left">
 <table>
@@ -841,7 +840,7 @@ p.footer-text a{color:#d7d8d8}
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Visit the <a href="https://github.com/aws-quickstart/quickstart-eks-rancher" target="_blank" rel="noopener">GitHub repository</a> for source files and to post feedback,
+Visit our <a href="https://github.com/aws-quickstart/quickstart-eks-rancher" target="_blank" rel="noopener">GitHub repository</a> for source files and to post feedback,
 report bugs, or submit feature ideas for this Quick Start.
 </td>
 </tr>
@@ -859,7 +858,7 @@ report bugs, or submit feature ideas for this Quick Start.
 <p>This guide provides instructions for deploying the Rancher Quick Start reference architecture on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start is for users who want to deploy Rancher to manage their Kubernetes cluster(s).</p>
+<p>This Quick Start is for users who want to deploy Rancher to manage Kubernetes clusters.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -879,19 +878,18 @@ Amazon may share user-deployment information with the AWS Partner that collabora
 <h2 id="_rancher_on_aws">Rancher on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Rancher is a complete software stack for teams adopting containers. It addresses the operational and security challenges of managing multiple Kubernetes clusters, while providing DevOps teams with integrated tools for running containerized workloads.</p>
+<p>Rancher is a software stack for teams that want to adopt containers. It addresses the operational and security challenges of managing multiple Kubernetes clusters while providing DevOps teams with integrated tools for running containerized workloads.</p>
 </div>
 <div class="paragraph">
-<p>AWS customers can use this Quick Start to deploy Rancher into their existing EKS cluster, or can deploy a new EKS cluster with Rancher automatically deployed for cluster management.</p>
+<p>AWS customers can use this Quick Start to either deploy Rancher into an existing Amazon Elastic Kubernetes Service (Amazon EKS) cluster or a new EKS cluster with Rancher automatically deployed for cluster management.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_cost">Cost</h2>
+<h2 id="_aws_costs">AWS costs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You are responsible for the cost of the AWS services used while running
-this Quick Start. There is no additional cost for
+<p>You are responsible for the cost of the AWS services and any paid third-party licenses used while running this Quick Start. There is no additional cost for
 using the Quick Start.</p>
 </div>
 <div class="paragraph">
@@ -907,7 +905,7 @@ see the pricing pages for each AWS service you use. Prices are subject to change
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">AWS Cost and Usage Reports</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. These reports provide cost estimates based on usage throughout each month and aggregate the data at the end of the month. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">What are AWS Cost and Usage Reports?</a>
+After you deploy the Quick Start, <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">create AWS Cost and Usage Reports</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. These reports provide cost estimates based on usage throughout each month and aggregate the data at the end of the month. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">What are AWS Cost and Usage Reports?</a>
 </td>
 </tr>
 </table>
@@ -918,7 +916,7 @@ After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/aw
 <h2 id="_software_licenses">Software licenses</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Rancher is open-source software, it does not require a license.</p>
+<p>Rancher is open-source software and does not require a license.</p>
 </div>
 </div>
 </div>
@@ -926,9 +924,9 @@ After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/aw
 <h2 id="_architecture">Architecture</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Deploying this Quick Start for a new virtual private cloud (VPC) and new EKS cluster
-default parameters builds the following Rancher environment in the
-AWS Cloud.</p>
+<p>Deploying this Quick Start for a new virtual private cloud (VPC) and new Amazon EKS cluster
+using default parameters builds the following Rancher environment in the
+AWS Cloud:</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
@@ -958,7 +956,7 @@ internet access for resources in the private subnets.*</p>
 </li>
 <li>
 <p>A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to EC2 instances in public and private subnets.*</p>
+Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets.*</p>
 </li>
 </ul>
 </div>
@@ -968,27 +966,27 @@ Shell (SSH) access to EC2 instances in public and private subnets.*</p>
 <div class="ulist">
 <ul>
 <li>
-<p>An Amazon EKS cluster, which provides the Kubernetes control plane.*</p>
-</li>
-<li>
 <p>A group of Kubernetes nodes.*</p>
 </li>
 <li>
-<p>Rancher deployed using AWS Systems Manager automation.</p>
-</li>
-<li>
-<p>A network load balancer (NLB) for accessing the Rancher console.</p>
+<p>A Network Load Balancer for accessing the Rancher console.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>A Route 53 DNS record for easily accessing the Rancher deployment.</p>
+<p>Rancher deployment using AWS Systems Manager automation.</p>
+</li>
+<li>
+<p>Amazon Elastic Container Kubernetes for the Amazon EKS cluster, which provides the Kubernetes control plane.*</p>
+</li>
+<li>
+<p>An Amazon Route 53 DNS record for accessing the Rancher deployment.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p><span class="small">*The template that deploys the Quick Start into an existing EKS cluster skips the components marked by asterisks and prompts you for your existing VPC configuration.</span></p>
+<p><span class="small">*The template that deploys the Quick Start into an existing Amazon EKS cluster skips the components marked by asterisks and prompts you for your existing VPC configuration.</span></p>
 </div>
 </div>
 </div>
@@ -1000,17 +998,17 @@ Shell (SSH) access to EC2 instances in public and private subnets.*</p>
 <div class="paragraph">
 <p>This deployment requires a moderate level of familiarity with
 AWS services. If you’re new to AWS, see <a href="https://aws.amazon.com/getting-started/" target="_blank" rel="noopener">Getting Started Resource Center</a>
-and <a href="https://aws.amazon.com/training/">AWS Training and Certification</a>. These sites provide materials for learning how to design,
+and <a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">AWS Training and Certification</a>. These sites provide materials for learning how to design,
 deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start assumes familiarity with Kubernetes.</p>
+<p>This Quick Start assumes that you are familiar with Kubernetes.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_aws_account">AWS account</h3>
 <div class="paragraph">
-<p>If you don’t already have an AWS account, create one at <a href="https://aws.amazon.com/" target="_blank" rel="noopener">https://aws.amazon.com</a> by following the on-screen instructions. Part of the sign-up process involves receiving a phone call and entering a PIN using your phone&#8217;s keypad.</p>
+<p>If you don’t already have an AWS account, create one at <a href="https://aws.amazon.com/" target="_blank" rel="noopener">https://aws.amazon.com</a> by following the on-screen instructions. Part of the sign-up process involves receiving a phone call and entering a PIN using the phone keypad.</p>
 </div>
 <div class="paragraph">
 <p>Your AWS account is automatically signed up for all AWS services. You are charged only for the services you use.</p>
@@ -1019,12 +1017,12 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <div class="sect2">
 <h3 id="_technical_requirements">Technical requirements</h3>
 <div class="paragraph">
-<p>Before you launch the Quick Start, your account must be configured as specified in the following table. Otherwise, the deployment might fail.</p>
+<p>Before you launch the Quick Start, your account must be configured as specified in the following table. Otherwise, deployment might fail.</p>
 </div>
 <div class="sect3">
 <h4 id="_resource_quotas">Resource quotas</h4>
 <div class="paragraph">
-<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might need to request increases if your existing deployment uses these resources and you exceed the default quotas. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
+<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might request quota increases to avoid exceeding the default limits for any resources that are shared across multiple deployments. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1055,11 +1053,11 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Route 53 Private Hosted Zone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route 53 private hosted zone</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Route 53 Private Hosted Zone Entry</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route 53 private hosted zone entry</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 </tbody>
@@ -1068,7 +1066,7 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <div class="sect3">
 <h4 id="_supported_regions">Supported Regions</h4>
 <div class="paragraph">
-<p>This Quick Start is supported in any AWS Region in which Amazon Elastic Kubernetes Service (EKS) is supported. See the <a href="https://docs.aws.amazon.com/general/latest/gr/eks.html">EKS Documentation</a> page for a list of supported Regions.</p>
+<p>This Quick Start is supported in any AWS Region in which Amazon Elastic Kubernetes Service (EKS) is supported. For a list of supported Regions, see <a href="https://docs.aws.amazon.com/general/latest/gr/eks.html" target="_blank" rel="noopener">Amazon Elastic Kubernetes Service endpoints and quotas</a>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1077,7 +1075,7 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing AWS Regions</a>.
+Certain Regions are available on an opt-in basis. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing AWS Regions</a>.
 </td>
 </tr>
 </table>
@@ -1097,7 +1095,7 @@ Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy Rancher into a new EKS cluster</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, EKS cluster, and other infrastructure components. It then deploys Rancher into this new EKS cluster.</p>
+<p><strong>Deploy Rancher into a new EKS cluster</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, Amazon EKS cluster, and other infrastructure components. It then deploys Rancher into this new EKS cluster.</p>
 </li>
 <li>
 <p><strong>Deploy Rancher into an existing EKS cluster</strong>. This option provisions Rancher in your existing AWS infrastructure.</p>
@@ -1105,7 +1103,7 @@ Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.
 </ul>
 </div>
 <div class="paragraph">
-<p>When deploying into a new EKS cluster, the <a href="https://aws.amazon.com/quickstart/architecture/amazon-eks/">Amazon EKS Architecture</a> Quick Start is deployed, with the option to then deploy the Rancher Quick Start into the new cluster pre-selected.</p>
+<p>When deploying into a new EKS cluster, the <a href="https://aws.amazon.com/quickstart/architecture/amazon-eks/" target="_blank" rel="noopener">Amazon EKS</a> Quick Start deploys with the option to deploy this Rancher Quick Start, the new cluster is selected by default.</p>
 </div>
 </div>
 </div>
@@ -1119,10 +1117,10 @@ Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Sign in to your AWS account at <a href="https://aws.amazon.com" class="bare">https://aws.amazon.com</a> with an IAM user role that has the necessary permissions. For details, see <a href="#_planning_the_deployment">Planning the deployment</a> earlier in this guide.</p>
+<p>Sign in to your AWS account at <a href="https://aws.amazon.com" class="bare">https://aws.amazon.com</a> with an IAM user role that has the necessary permissions. For more information, see <a href="#_planning_the_deployment">Planning the deployment</a>, earlier in this guide.</p>
 </li>
 <li>
-<p>Make sure that your AWS account is configured correctly, as discussed in the <a href="#_technical_requirements">Technical requirements</a> section.</p>
+<p>Ensure that your AWS account is configured correctly, as discussed in the <a href="#_technical_requirements">Technical requirements</a> section.</p>
 </li>
 </ol>
 </div>
@@ -1144,7 +1142,7 @@ You are responsible for the cost of the AWS services used while running this Qui
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">deployment options</a> earlier in this guide.</p>
+<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">Deployment options</a>, earlier in this guide.</p>
 </li>
 </ol>
 </div>
@@ -1170,7 +1168,7 @@ You are responsible for the cost of the AWS services used while running this Qui
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
-<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This is where the network infrastructure for Rancher will be built. The template is launched in the us-east-1 Region by default.</p>
+<p>Check the AWS Region displayed in the upper-right corner of the navigation bar, and change it if necessary. This is where the network infrastructure for Rancher is built. The template launches in the us-east-1 Region by default.</p>
 </li>
 </ol>
 </div>
@@ -1180,7 +1178,7 @@ You are responsible for the cost of the AWS services used while running this Qui
 <p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
 </li>
 <li>
-<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary.</p>
+<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template, and provide values for any parameters that require input. For all other parameters, review the default settings, and customize them as necessary.</p>
 </li>
 </ol>
 </div>
@@ -1194,8 +1192,7 @@ You are responsible for the cost of the AWS services used while running this Qui
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Unless you are customizing the Quick Start templates for your own deployment projects, we recommend that you keep the default settings for the parameters labeled <code>Quick Start S3 bucket name</code>, <code>Quick Start S3 bucket
-Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parameter settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
+Unless you are customizing the Quick Start templates for your own deployment projects, keep the default settings for the parameters <strong>Quick Start S3 bucket name</strong>, <strong>Quick Start S3 bucket Region</strong>, and <strong>Quick Start S3 key prefix</strong>. Changing these settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
 </td>
 </tr>
 </table>
@@ -1322,7 +1319,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="olist arabic">
 <ol class="arabic" start="5">
 <li>
-<p>On the <strong>Configure stack options</strong> page, you can specify <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html" target="_blank" rel="noopener">key-value pairs</a> for resources in your stack and <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html" target="_blank" rel="noopener">set advanced options</a>. When you’re finished, choose <strong>Next</strong>.</p>
+<p>On the <strong>Configure stack options</strong> page, you can <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html" target="_blank" rel="noopener">specify tags</a> (key-value pairs) for resources in your stack and <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html" target="_blank" rel="noopener">set advanced options</a>. When you’re finished, choose <strong>Next</strong>.</p>
 </li>
 <li>
 <p>On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select the two check boxes to acknowledge that the template creates IAM resources and might require the ability to automatically expand macros.</p>
@@ -1340,7 +1337,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </div>
 <div id="cfn_outputs" class="imageblock">
 <div class="content">
-<a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="648" height="439"></a>
+<a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="100%" height="100%"></a>
 </div>
 <div class="title">Figure 2. Rancher outputs after successful deployment</div>
 </div>
@@ -1353,15 +1350,15 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <div class="ulist square">
 <ul class="square">
 <li>
-<p>If a DNS domain option was specified, login to EKS Bastion host and execute: <em>curl -k https://rancher.[domain specified]/</em></p>
+<p>If a DNS domain option was specified, log in to the Amazon EKS bastion host, and run <code>curl -k https://rancher.[domain specified]/</code></p>
 </li>
 <li>
-<p>If a DNS domain option was <strong>NOT</strong> specified, login to EKS Bastion host and execute: <em>curl -k https://rancher.aws.private/</em></p>
+<p>If a DNS domain option was not specified, log in to the Amazon EKS bastion host, and run <code>curl -k https://rancher.aws.private/</code></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The output should look something like this:</p>
+<p>The output should look like the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1373,7 +1370,7 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 </div>
 </div>
 <div class="sect1">
-<h2 id="_post_deployment_steps">Post deployment steps</h2>
+<h2 id="_post_deployment_steps">Post-deployment steps</h2>
 <div class="sectionbody">
 <div class="dlist">
 <dl>
@@ -1382,26 +1379,29 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Deploy a RDP Bastion host into a public subnet of the VPC which hosts the EKS worker nodes</p>
+<p>Deploy an RDP bastion host into a public subnet of the VPC that hosts the EKS worker nodes.</p>
 </li>
 <li>
-<p>Open a browser and enter the Rancher console URL as shown above</p>
+<p>Open a browser, and navigate to the Rancher console URL.</p>
 </li>
 <li>
-<p>Complete the initial configurations such as creating an admin password</p>
+<p>Complete the initial configurations, such as creating an administrator password.</p>
 </li>
 </ol>
 </div>
 </dd>
-<dt class="hdlist1">Uninstallation of Rancher</dt>
+<dt class="hdlist1">Uninstalling Rancher</dt>
 <dd>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>An uninstall script is included in the <a href="https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh">git repository.</a> It takes two parameters [AWS Region] [domain name].  Download it onto the EKS bastion host if you wish to uninstall rancher.</p>
+<p>An uninstall script is included in the <a href="https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/rancher_uninstall.sh" target="_blank" rel="noopener">git repository</a>. It requires parameters for AWS Region and domain name. If you want to uninstall rancher, download the script to the Amazon EKS bastion host.</p>
 </li>
 <li>
-<p>From the bastion host, as ec2-user, run this command <code>kubectl edit namespace cattle-system</code> and remove the finalizer called <code>controller.cattle.io/namespace-auth</code>. Second, execute the uninstall script (i.e. <code>sh rancher_uninstall.sh us-east-2 my.domain</code>)</p>
+<p>From the bastion host, as ec2-user, run <code>kubectl edit namespace cattle-system</code>, and remove the finalizer called <code>controller.cattle.io/namespace-auth</code>.</p>
+</li>
+<li>
+<p>Run the uninstall script (that is, <code>sh rancher_uninstall.sh us-east-2 my.domain</code>).</p>
 </li>
 </ol>
 </div>
@@ -1417,7 +1417,7 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 <p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>Disabled</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
+<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>Disabled</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained, and the instance remains running so you can troubleshoot the issue. (For Windows, look at the log files in <code>%ProgramFiles%\Amazon\EC2ConfigService</code> and <code>C:\cfn\log</code>.)</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1426,27 +1426,19 @@ ta","version":"v1"},"baseType":"apiRoot","links":{"apiRoots":"https://rancher.aw
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Please make sure to delete the stack when you finish troubleshooting.
+When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for the stack. Ensure to delete the stack when you finish troubleshooting.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>For additional information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a> on the AWS website.</p>
+<p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a>.</p>
 </div>
 <div class="paragraph">
 <p><strong>Q.</strong> I encountered a size limitation error when I deployed the AWS CloudFormation templates.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_troubleshooting">Troubleshooting</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>&lt;Steps for troubleshooting the deployment go here.&gt;</p>
+<p><strong>A.</strong> We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer, or from a location other than an S3 bucket, you might encounter template size limitations. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS CloudFormation quotas</a>.</p>
 </div>
 </div>
 </div>
@@ -1462,7 +1454,7 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <h2 id="_quick_start_reference_deployments">Quick Start reference deployments</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>See the <a href="https://aws.amazon.com/quickstart/" target="_blank" rel="noopener">AWS Quick Start home page</a>.</p>
+<p>See the <a href="https://aws.amazon.com/quickstart/">AWS Quick Start home page</a>.</p>
 </div>
 </div>
 </div>
@@ -1470,9 +1462,9 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <h2 id="_github_repository">GitHub repository</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>See the <a href="https://github.com/aws-quickstart/quickstart-eks-rancher" target="_blank" rel="noopener">GitHub repository</a> to download
-the templates and scripts for this Quick Start, post comments,
-and share customizations with others.</p>
+<p>Visit our <a href="https://github.com/aws-quickstart/quickstart-eks-rancher" target="_blank" rel="noopener">GitHub repository</a> to download
+the templates and scripts for this Quick Start, to post your comments,
+and to share your customizations with others.</p>
 </div>
 <hr>
 </div>
@@ -1484,15 +1476,15 @@ and share customizations with others.</p>
 <p>This document is provided for informational purposes only. It represents AWS’s current product offerings and practices as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS’s products or services, each of which is provided “as is” without warranty of any kind, whether expressed or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.</p>
 </div>
 <div class="paragraph">
-<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" class="bare">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied. See the License for specific language governing permissions and limitations.</p>
+<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" target="_blank" rel="noopener">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied. See the License for specific language governing permissions and limitations.</p>
 </div>
 </div>
 </div>
 </div>
 <p class="footer-text">
 <!-- We can use document attributes: -->
-<!-- Generated with Asciidoctor v2.0.10. -->
-<a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2020, Amazon Web Services, Inc. or its affiliates and Rancher Labs. All rights reserved.
+<!-- Generated with Asciidoctor v2.0.12. -->
+<a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2021, Amazon Web Services, Inc. or its affiliates and Rancher Labs. All rights reserved.
 </p>
 </body>
 </html>
