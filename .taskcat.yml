@@ -1,0 +1,8 @@
+project:
+  name: quickstart-eks-rancher
+  owner: quickstart-eng@amazon.com
+  regions: ["us-east-2"]
+  template: templates/rancher.template.yaml
+  parameters: {}
+tests:
+  defaults: {}
