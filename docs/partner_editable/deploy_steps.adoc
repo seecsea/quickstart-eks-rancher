@@ -29,11 +29,14 @@ NOTE: You are responsible for the cost of the AWS services used while running th
 
 [cols=2*]
 |===
-^|http://qs_launch_link[Deploy {partner-product-short-name} into a new EKS cluster on AWS^]
+^|http://qs_launch_link[Deploy {partner-product-short-name} into a new VPC and new Amazon EKS cluster^]
 ^|https://github.com/aws-quickstart/quickstart-amazon-eks/blob/main/templates/amazon-eks-entrypoint-new-vpc.template.yaml[View template^]
 
-^|http://qs_launch_link[Deploy {partner-product-short-name} into an existing EKS cluster on AWS^]
+^|http://qs_launch_link[Deploy {partner-product-short-name} into an existing VPC and a new Amazon EKS cluster^]
 ^|https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/templates/rancher.template.yaml[View template^]
+
+^|http://qs_launch_link[Deploy {partner-product-short-name} into an existing VPC and existing Amazon EKS cluster^]
+^|https://aws-quickstart.s3.us-east-1.amazonaws.com/quickstart-amazon-eks/templates/amazon-eks-entrypoint-existing-vpc.template.yaml[View template^]
 |===
 
 Each deployment takes about {deployment_time} to complete.
