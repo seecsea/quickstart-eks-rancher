@@ -4,4 +4,4 @@
 
 Rancher is a software stack for teams that want to adopt containers. It addresses the operational and security challenges of managing multiple Kubernetes clusters while providing DevOps teams with integrated tools for running containerized workloads.
 
-AWS customers can deploy Rancher into a new VPC and new Amazon EKS cluster, an existing VPC and new EKS cluster, or an existing VPC and existing EKS cluster.
+AWS customers can deploy Rancher into a new VPC and new Amazon EKS cluster, an existing VPC and a new EKS cluster, or an existing VPC and existing EKS cluster.
