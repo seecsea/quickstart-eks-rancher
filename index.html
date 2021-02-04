@@ -833,7 +833,7 @@ p.footer-text a{color:#d7d8d8}
 </div>
 </div>
 <div class="paragraph text-center">
-<p><strong>January 2021</strong><br>
+<p><strong>February 2021</strong><br>
 <em>Nelson Roberts, Rancher Labs</em><br>
 <em>Andrew Park, Keith Andruch, and Dave May, AWS Quick Start team</em></p>
 </div>
@@ -956,10 +956,10 @@ best practices, to provide you with your own virtual network on AWS.*</p>
 <ul>
 <li>
 <p>Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*</p>
+internet access for resources.*</p>
 </li>
 <li>
-<p>A Linux bastion host in an Auto Scaling group to allow inbound Secure
+<p>Linux bastion hosts in an Auto Scaling group to allow inbound Secure
 Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets.*</p>
 </li>
 </ul>
@@ -970,10 +970,10 @@ Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in pub
 <div class="ulist">
 <ul>
 <li>
-<p>A group of Kubernetes nodes.*</p>
+<p>Kubernetes nodes in an Auto Scaling group.*</p>
 </li>
 <li>
-<p>A Network Load Balancer for accessing the Rancher console.</p>
+<p>A Network Load Balancer (not shown) for accessing the Rancher console.</p>
 </li>
 </ul>
 </div>
@@ -982,7 +982,7 @@ Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in pub
 <p>Rancher deployment using AWS Systems Manager automation.</p>
 </li>
 <li>
-<p>Amazon Elastic Container Kubernetes for the Amazon EKS cluster, which provides the Kubernetes control plane.*</p>
+<p>Amazon EKS service for the EKS cluster, which provides the Kubernetes control plane.*</p>
 </li>
 <li>
 <p>An Amazon Route 53 DNS record for accessing the Rancher deployment.</p>
@@ -1021,7 +1021,7 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <div class="sect2">
 <h3 id="_technical_requirements">Technical requirements</h3>
 <div class="paragraph">
-<p>Before you launch the Quick Start, review the following information and ensure that your account is properly configured. Otherwise, deployment might fail.</p>
+<p>Before you launch the Quick Start, your account must be configured as specified in the following table. Otherwise, deployment might fail.</p>
 </div>
 <div class="sect3">
 <h4 id="_resource_quotas">Resource quotas</h4>
@@ -1094,20 +1094,23 @@ Certain Regions are available on an opt-in basis. For more information, see <a h
 <div class="sect3">
 <h4 id="_deployment_options">Deployment options</h4>
 <div class="paragraph">
-<p>This Quick Start provides two deployment options:</p>
+<p>This Quick Start provides three deployment options:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy Rancher into a new EKS cluster</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, Amazon EKS cluster, and other infrastructure components. It then deploys Rancher into this new EKS cluster.</p>
+<p><strong>Deploy Rancher into a new VPC and new Amazon EKS cluster</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, Amazon EKS cluster, and other infrastructure components. It then deploys Rancher into this new EKS cluster.</p>
 </li>
 <li>
-<p><strong>Deploy Rancher into an existing EKS cluster</strong>. This option provisions Rancher in your existing AWS infrastructure.</p>
+<p><strong>Deploy Rancher into an existing VPC and a new Amazon EKS cluster</strong>. This option provisions Rancher in your existing AWS infrastructure.</p>
+</li>
+<li>
+<p><strong>Deploy Rancher into an existing VPC and existing Amazon EKS cluster</strong>. This option provisions Rancher in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>When deploying into a new EKS cluster, the <a href="https://aws.amazon.com/quickstart/architecture/amazon-eks/" target="_blank" rel="noopener">Amazon EKS</a> Quick Start deploys with the option to deploy this Rancher Quick Start, the new cluster is selected by default.</p>
+<p>When deploying into a new EKS cluster, the <a href="https://aws.amazon.com/quickstart/architecture/amazon-eks/" target="_blank" rel="noopener">Amazon EKS</a> Quick Start deploys with the option to deploy this Rancher Quick Start, a new cluster is selected by default.</p>
 </div>
 </div>
 </div>
@@ -1157,17 +1160,21 @@ You are responsible for the cost of the AWS services used while running this Qui
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy Rancher into a new EKS cluster on AWS</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy Rancher into a new VPC and new Amazon EKS cluster</a></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/aws-quickstart/quickstart-amazon-eks/blob/main/templates/amazon-eks-entrypoint-new-vpc.template.yaml" target="_blank" rel="noopener">View template</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy Rancher into an existing EKS cluster on AWS</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy Rancher into an existing VPC and a new Amazon EKS cluster</a></p></td>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/templates/rancher.template.yaml" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_link" target="_blank" rel="noopener">Deploy Rancher into an existing VPC and existing Amazon EKS cluster</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="https://aws-quickstart.s3.us-east-1.amazonaws.com/quickstart-amazon-eks/templates/amazon-eks-entrypoint-existing-vpc.template.yaml" target="_blank" rel="noopener">View template</a></p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Each deployment takes about 30 minutes to complete.</p>
+<p>Each deployment takes about 0.5–2.5 hours to complete.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="2">
@@ -1495,10 +1502,3 @@ and to share your customizations with others.</p>
 </p>
 </body>
 </html>
-<!--
-repo commit:
-1807c806dc904db3058980d582d56c75debe97db
-
-submodule config:
-+df069e8b4d1d4785c42ca6f65a02d880a7d7f3a5 docs/boilerplate (heads/main)
--->
