@@ -40,8 +40,8 @@ else
 fi
 
 #Download latest Rancher repository
-helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
-helm fetch rancher-latest/rancher
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+helm fetch rancher-stable/rancher
 
 # Create NameSpace:
 kubectl create namespace cattle-system
@@ -54,10 +54,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 #Create the secret in the cluster:
 kubectl create secret tls tls-secret --key tls.key --cert tls.crt
 
-helm upgrade --install rancher rancher-latest/rancher \
-  --namespace cattle-system \
-  --set hostname=$RancherURL  \
-  --set ingress.tls.source=secret
+sleep 300
+
+helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system --set hostname=$RancherURL --set ingress.tls.source=secret
 
 #Create Route53 Hosted Zone
 CALLER_REF=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
