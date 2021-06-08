@@ -93,10 +93,21 @@ Parameters:
 
 Conditions:
   NoDomainSpecified: !Equals [ !Ref DomainName, '' ]
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 
 Resources:
   SSMAutomationRole:
     Type: AWS::IAM::Role
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+            - EIAMPolicyActionWildcard
+      cfn_nag:
+        rules_to_suppress:
+          - id: F38
+            reason: "IAM * permissions are required to create managed IAM policies"
     Properties:
       Policies:
         - PolicyDocument:
@@ -104,7 +115,9 @@ Resources:
             Statement:
               - Action:
                   - s3:GetObject
-                Resource: "*"
+                Resource: !Sub
+                  - arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*
+                  - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
                 Effect: Allow
           PolicyName: aws-quick-start-s3-policy
         - PolicyDocument:
@@ -112,7 +125,7 @@ Resources:
             Statement:
               - Action:
                   - ssm:GetParameters
-                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter//ami-amazon-linux/latest"
+                Resource: !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter//ami-amazon-linux/latest"
                 Effect: Allow
           PolicyName: aws-quick-start-ssm-param-store-policy
         - PolicyDocument:
@@ -285,7 +298,9 @@ Resources:
                         - Action:
                             - s3:GetObject
                             - s3:ListBucket
-                          Resource: "*"
+                          Resource: !Sub
+                            - arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*
+                            - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
                           Effect: Allow
                     Roles:
                     - !Ref IAMRole
