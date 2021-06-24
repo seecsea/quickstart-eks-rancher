@@ -108,6 +108,8 @@ Resources:
         rules_to_suppress:
           - id: F38
             reason: "IAM * permissions are required to create managed IAM policies"
+          - id: W11
+            reason: "IAM * permissions are required to create managed IAM policies"
     Properties:
       Policies:
         - PolicyDocument:
@@ -450,6 +452,11 @@ Resources:
             StackName: "InstallRancher"
   LambdaSSMExecute:
     Type: AWS::Lambda::Function
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: "LambdaSSMRole has proper permissions via managed policy"
     Properties:
       Description: Executes SSM Automation Documents
       Handler: index.handler
