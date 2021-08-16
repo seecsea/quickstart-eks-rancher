@@ -82,7 +82,7 @@ Parameters:
       forward slash (/).
     Type: String
   EKSClusterName:
-    AllowedPattern: ^EKS-[0-9a-zA-Z]{8}$
+#    AllowedPattern: ^EKS-[0-9a-zA-Z]{8}$
     Description: EKS cluster name
     Type: String
   IAMRole:
