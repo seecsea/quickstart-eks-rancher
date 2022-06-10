@@ -21,7 +21,7 @@ sudo yum -y install jq
 aws eks update-kubeconfig --name ${EKSCLUSTERNAME} --region $REGION
 
 #Install kubectl
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.0/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.6/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 kubectl version --client
