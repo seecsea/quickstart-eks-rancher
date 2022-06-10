@@ -31,12 +31,12 @@ kubectl get svc
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
 # Start by creating the mandatory resources for NGINX Ingress in your cluster:
-# Parameterize version 1.2.2
+# Parameterize version 1.1.2
 if [ $QSS3BucketName == 'aws-quickstart' ]
 then
-  kubectl apply -f https://raw.githubusercontent.com/seecsea/quickstart-eks-rancher/main/scripts/deploy.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.2/deploy/static/provider/aws/1.22/deploy.yaml
 else
-  kubectl apply -f https://raw.githubusercontent.com/seecsea/quickstart-eks-rancher/main/scripts/deploy.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.2/deploy/static/provider/aws/1.22/deploy.yaml
 fi
 
 #Download latest Rancher repository
