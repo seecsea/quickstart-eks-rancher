@@ -56,4 +56,4 @@ aws route53 delete-hosted-zone --id $ZONE_ID
 rm -f rancher-record-set.json
 
 # Delete resources for NGINX Ingress in your cluster:
-kubectl delete -f https://github.com/aws-quickstart/quickstart-eks-rancher/blob/main/functions/source/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/aws/deploy.yaml
+kubectl delete -f https://raw.githubusercontent.com/seecsea/quickstart-eks-rancher/main/scripts/deploy.yaml
