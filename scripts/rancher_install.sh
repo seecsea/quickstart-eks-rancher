@@ -28,7 +28,11 @@ kubectl version --client
 kubectl get svc
 
 # Install helm
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+# curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+DESIRED_VERSION=v3.8.2 bash get_helm.sh
 
 # Start by creating the mandatory resources for NGINX Ingress in your cluster:
 # Parameterize version 1.1.2
