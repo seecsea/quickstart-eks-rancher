@@ -58,7 +58,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 #Create the secret in the cluster:
 kubectl create secret tls tls-secret --key tls.key --cert tls.crt
 
-sleep 300
+sleep 120
 
 helm upgrade --install rancher rancher-stable/rancher --namespace cattle-system --set hostname=$RancherURL --set ingress.tls.source=secret
 
